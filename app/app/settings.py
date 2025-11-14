@@ -127,5 +127,5 @@ MEDIA_ROOT.mkdir(exist_ok=True)
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
-LOGIN_REDIRECT_URL = reverse_lazy("warehouse:base")
+LOGIN_REDIRECT_URL = reverse_lazy("warehouse:main")
 LOGIN_URL = "/accounts/login/"

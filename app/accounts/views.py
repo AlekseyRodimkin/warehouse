@@ -10,7 +10,7 @@ from .models import Profile
 
 
 class AppLogoutView(LogoutView):
-    next_page = reverse_lazy("accounts:login")
+    next_page = reverse_lazy("warehouse:main")
 
 
 class RegisterView(CreateView):
@@ -26,3 +26,7 @@ class RegisterView(CreateView):
         user = authenticate(self.request, username=username, password=password)
         login(request=self.request, user=user)
         return response
+
+
+class MeView(TemplateView):
+    template_name = "accounts/me.html"

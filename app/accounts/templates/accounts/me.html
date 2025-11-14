@@ -1,0 +1,39 @@
+{% extends 'warehouse/base.html' %}
+
+{% block title %}Me{% endblock %}
+
+
+{% block body %}
+<div class="container d-flex justify-content-center">
+    <div class="p-3 p-md-4 rounded-3 bg-light border">
+        <div class="d-flex flex-column flex-md-row align-items-start align-items-md-center">
+
+            <!-- Аватар -->
+            <div class="me-md-4 mb-3 mb-md-0">
+                <svg xmlns="http://www.w3.org/2000/svg" width="80" height="80" fill="currentColor"
+                     class="bi bi-person-circle" viewBox="0 0 16 16">
+                    <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0"/>
+                    <path fill-rule="evenodd"
+                          d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8m8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1"/>
+                </svg>
+            </div>
+
+            <div class="flex-grow-1">
+                <h4 class="mb-1">Алексей Иванов</h4>
+                <p class="text-muted mb-2">email@example.com</p>
+                <p class="text-muted mb-2">email@example.com</p>
+                <p class="text-muted mb-2">email@example.com</p>
+
+                <div class="d-flex flex-wrap gap-2">
+                    <form method="post" action="{% url 'accounts:logout' %}">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-outline-secondary btn-sm">Выход</button>
+                    </form>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+{% endblock %}

@@ -38,6 +38,9 @@
         </svg>
     </a>
     {% else %}
+    <button id="themeToggleBtn" class="nav-link d-flex align-items-center">
+        <span id="themeIcon" style="font-size: 25px;">🌒</span>
+    </button>
     <a href="{% url 'accounts:login' %}" type="button" class="btn btn-outline-primary me-2 btn-sm">Войти</a>
     {% endif %}
 
@@ -49,6 +52,7 @@
 </div>
 
 {% block scripts %}{% endblock %}
+<script src="/static/js/scheme_button.js"></script>
 </body>
 </html>
 

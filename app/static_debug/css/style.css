@@ -1,0 +1,16 @@
+ #themeIcon {
+    font-size: 28px;
+ }
+
+ .inventory-weight-qty-input {
+    max-width: 125px;
+ }
+
+.table-container {
+    height: 75vh; overflow-y: auto
+}
+
+.no-data-table {
+    text-align: center;
+    vertical-align: middle;
+}

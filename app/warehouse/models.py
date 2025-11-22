@@ -1,3 +1,4 @@
+from django.contrib.auth import get_user_model
 from django.contrib.auth.models import User
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
@@ -22,6 +23,12 @@ class Item(models.Model):
     item_code = models.CharField(max_length=100, unique=True)
     description = models.TextField(blank=True, max_length=500)
     created_at = models.DateTimeField(auto_now_add=True)
+
+    def save(self, *args, **kwargs):
+        """Приводит код товара к верхнему регистру перед сохранением"""
+        if self.item_code:
+            self.item_code = self.item_code.strip().upper()
+        super().save(*args, **kwargs)
 
     @property
     def description_short(self) -> str:
@@ -66,6 +73,12 @@ class Place(models.Model):
         blank=True,
     )
 
+    def save(self, *args, **kwargs):
+        """Приводит код места к верхнему регистру перед сохранением"""
+        if self.title:
+            self.title = self.title.strip().upper()
+        super().save(*args, **kwargs)
+
     @property
     def description_short(self) -> str:
         return (
@@ -73,6 +86,21 @@ class Place(models.Model):
             if len(self.description) < 48
             else self.description[:48] + "..."
         )
+
+    @property
+    def full_address(self) -> str:
+        """
+        Возвращает полный адрес
+        Если нет родителей: "title"
+        Если есть zone: "zone.title/title"
+        Если есть stock: "stock.title/zone.title/title"
+        """
+        parts = [self.title]
+        if self.zone:
+            parts.insert(0, self.zone.title)
+            if self.zone.stock:
+                parts.insert(0, self.zone.stock.title)
+        return "/".join(parts)
 
     class Meta:
         ordering = ["title"]
@@ -114,6 +142,21 @@ class PlaceItem(models.Model):
         default="new",
     )
 
+    @property
+    def full_address(self) -> str:
+        """
+        Возвращает полный адрес
+        Если нет родителей: "place.title"
+        Если есть zone: "place.zone.title/place.title"
+        Если есть stock: "place.zone.stock.title/zone.title/place.title"
+        """
+        parts = [self.place.title]
+        if self.place.zone:
+            parts.insert(0, self.place.zone.title)
+            if self.place.zone.stock:
+                parts.insert(0, self.place.zone.stock.title)
+        return "/".join(parts)
+
     class Meta:
         ordering = ["pk"]
         unique_together = (
@@ -147,6 +190,12 @@ class Zone(models.Model):
         blank=True,
     )
 
+    def save(self, *args, **kwargs):
+        """Приводит код зоны к верхнему регистру перед сохранением"""
+        if self.title:
+            self.title = self.title.strip().upper()
+        super().save(*args, **kwargs)
+
     @property
     def description_short(self) -> str:
         return (
@@ -154,6 +203,18 @@ class Zone(models.Model):
             if len(self.description) < 48
             else self.description[:48] + "..."
         )
+
+    @property
+    def full_address(self) -> str:
+        """
+        Возвращает полный адрес
+        Если нет родителя: "title"
+        Если есть stock: "stock.title/title"
+        """
+        parts = [self.title]
+        if self.stock:
+            parts.insert(0, self.stock.title)
+        return "/".join(parts)
 
     class Meta:
         ordering = ["title"]
@@ -178,6 +239,12 @@ class Stock(models.Model):
     description = models.TextField(max_length=500, null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
+    def save(self, *args, **kwargs):
+        """Приводит код склада к верхнему регистру перед сохранением"""
+        if self.title:
+            self.title = self.title.strip().upper()
+        super().save(*args, **kwargs)
+
     @property
     def description_short(self) -> str:
         return (
@@ -195,3 +262,71 @@ class Stock(models.Model):
 
     def __str__(self):
         return f"{self.title}"
+
+
+class History(models.Model):
+    """
+    Модель истории переселения
+
+    pk: int
+    date: datetime: 2000-01-02 10:30:45.123456+00:00
+    user: User
+    item: Item
+    old_place: str: Place
+    new_place: str: Place
+    """
+
+    date = models.DateTimeField(auto_now_add=True)
+    user = models.ForeignKey(
+        get_user_model(),
+        on_delete=models.PROTECT,
+        null=True,
+        blank=True
+    )
+
+    item = models.ForeignKey(
+        Item,
+        on_delete=models.PROTECT
+    )
+    count = models.PositiveIntegerField(default=1)
+    old_place = models.ForeignKey(
+        Place,
+        on_delete=models.PROTECT,
+        related_name="history_old_place",
+    )
+
+    new_place = models.ForeignKey(
+        Place,
+        on_delete=models.PROTECT,
+        related_name="history_new_place",
+    )
+
+    @property
+    def full_old_address(self) -> str:
+        """
+        Возвращает полный старый адрес
+        'stock.title/zone.title/place.title'
+        """
+        return "{stock}/{zone}/{place}".format(
+            stock=self.old_place.zone.stock.title,
+            zone=self.old_place.zone.title,
+            place=self.old_place.title,
+        )
+
+    @property
+    def full_new_address(self) -> str:
+        """
+        Возвращает полный новый адрес
+        'stock.title/zone.title/place.title'
+        """
+        return "{stock}/{zone}/{place}".format(
+            stock=self.new_place.zone.stock.title,
+            zone=self.new_place.zone.title,
+            place=self.new_place.title,
+        )
+
+    class Meta:
+        ordering = ["-date"]
+
+    def __str__(self):
+        return f"History #{self.pk}"

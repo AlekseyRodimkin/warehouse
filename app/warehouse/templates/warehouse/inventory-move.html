@@ -1,0 +1,109 @@
+{% extends 'warehouse/inventory_header.html' %}
+{% load widget_tweaks %}
+
+{% block title %}Inventory Move{% endblock %}
+
+{% if messages %}
+{% for message in messages %}
+<div class="alert alert-success">{{ message }}</div>
+{% endfor %}
+{% endif %}
+
+{% block body %}
+<div class="container-fluid p-2 ">
+    <div class="mb-2 p-2 border border-2 border-secondary rounded-4 small bg-body-tertiary">
+        <form method="post" class="mb-3">
+            {% csrf_token %}
+
+            {# Ошибки летят из forms.py/MoveItemForm.clean() #}
+            {% if form.non_field_errors %}
+            <div class="alert alert-danger">
+                {% for error in form.non_field_errors %}
+                <div>{{ error }}</div>
+                {% endfor %}
+            </div>
+            {% endif %}
+
+
+            <div class="row g-1 align-items-end">
+                <div class="text-center text-md-start text-primary"><h5>Откуда</h5></div>
+
+                <div class="col-auto">
+                    {{ form.item_code.label_tag }}
+                    {{ form.item_code|add_class:"form-control form-control-sm" }}
+                    {% if form.item_code.errors %}
+                    <div class="text-danger small">{{ form.item_code.errors }}</div>
+                    {% endif %}
+                </div>
+
+                <div class="col-auto">
+                    {{ form.from_full_address.label_tag }}
+                    {{ form.from_full_address|add_class:"form-control form-select-sm" }}
+                    {% if form.from_full_address.errors %}
+                    <div class="text-danger small">{{ form.from_full_address.errors }}</div>
+                    {% endif %}
+                </div>
+
+                <div class="col-auto">
+                    {{ form.from_stock.label_tag }}
+                    {{ form.from_stock|add_class:"form-select form-select-sm" }}
+                    {% if form.from_stock.errors %}
+                    <div class="text-danger small">{{ form.from_stock.errors }}</div>
+                    {% endif %}
+                </div>
+
+                <div class="col-auto">
+                    {{ form.from_zone.label_tag }}
+                    {{ form.from_zone|add_class:"form-control form-select-sm" }}
+                    {% if form.from_zone.errors %}
+                    <div class="text-danger small">{{ form.from_zone.errors }}</div>
+                    {% endif %}
+                </div>
+
+                <div class="col-auto">
+                    {{ form.from_place.label_tag }}
+                    {{ form.from_place|add_class:"form-control form-select-sm" }}
+                    {% if form.from_place.errors %}
+                    <div class="text-danger small">{{ form.from_place.errors }}</div>
+                    {% endif %}
+                </div>
+
+                <div class="col-auto">
+                    {{ form.quantity.label_tag }}
+                    {{ form.quantity|add_class:"form-control form-select-sm" }}
+                    {% if form.quantity.errors %}
+                    <div class="text-danger small">{{ form.quantity.errors }}</div>
+                    {% endif %}
+                </div>
+
+                <div class="row g-1 align-items-end">
+                    <div class="text-center text-md-start text-primary"><h5>Куда</h5></div>
+
+                    <div class="col-auto">
+                        {{ form.to_full_address.label_tag }}
+                        {{ form.to_full_address|add_class:"form-control form-select-sm" }}
+                    </div>
+
+                    <div class="col-auto">
+                        {{ form.to_stock.label_tag }}
+                        {{ form.to_stock|add_class:"form-select form-select-sm" }}
+                    </div>
+                    <div class="col-auto">
+                        {{ form.to_zone.label_tag }}
+                        {{ form.to_zone|add_class:"form-control form-select-sm" }}
+                    </div>
+                    <div class="col-auto">
+                        {{ form.to_place.label_tag }}
+                        {{ form.to_place|add_class:"form-control form-select-sm" }}
+                    </div>
+
+                </div>
+            </div>
+            <div class="col-12 text-center mt-4">
+                <button type="submit" class="btn btn-success btn">Переместить</button>
+                <a href="{% url 'warehouse:inventory-history' %}" class="btn btn-secondary btn">История</a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

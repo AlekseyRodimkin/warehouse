@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib import admin
 
-from .models import Item, Place, PlaceItem, Stock, Zone
+from .models import Item, Place, PlaceItem, Stock, Zone, History
 
 """
 Опции административной панели
@@ -82,8 +82,8 @@ class ItemAdmin(admin.ModelAdmin):
         "item_code",
     )
     ordering = (
-        "item_code",
         "pk",
+        "item_code",
     )
     list_filter = ["created_at"]
     readonly_fields = ["created_at"]
@@ -99,17 +99,16 @@ class ItemAdmin(admin.ModelAdmin):
 class PlaceAdmin(admin.ModelAdmin):
     list_display = (
         "pk",
-        "title",
+        "full_address",
         "description_short",
         "created_at",
     )
     list_display_links = (
-        "pk",
-        "title",
+        "pk", "full_address", "description_short",
     )
     ordering = (
-        "title",
         "pk",
+        "title",
     )
     inlines = [PlaceItemInline]
     list_filter = ["zone", "created_at"]
@@ -124,9 +123,9 @@ class PlaceAdmin(admin.ModelAdmin):
 
 @admin.register(PlaceItem)
 class PlaceItemAdmin(admin.ModelAdmin):
-    list_display = "pk", "place", "item", "quantity", "STATUS"
-    list_display_links = ("pk",)
-    ordering = ("pk",)
+    list_display = ("full_address", "item", "quantity", "STATUS")
+    list_display_links = ("full_address", "item",)
+    ordering = ("place",)
     autocomplete_fields = (
         "place",
         "item",
@@ -140,22 +139,30 @@ class PlaceItemAdmin(admin.ModelAdmin):
     list_editable = ("STATUS",)
     list_per_page = 50
 
+    def save_model(self, request, obj, form, change):
+        """
+        Создает временное поле _updated_by_user
+        Поле подхватывает сигнал для записи в History
+        """
+        obj._updated_by_user = request.user
+        super().save_model(request, obj, form, change)
+
 
 @admin.register(Zone)
 class ZoneAdmin(admin.ModelAdmin):
     list_display = (
         "pk",
-        "title",
+        "full_address",
         "description_short",
         "created_at",
     )
     list_display_links = (
         "pk",
-        "title",
+        "full_address",
     )
     ordering = (
-        "title",
         "pk",
+        "title",
     )
     inlines = [PlaceInline]
     list_filter = ["stock"]
@@ -182,8 +189,8 @@ class StockAdmin(admin.ModelAdmin):
         "title",
     )
     ordering = (
-        "title",
         "pk",
+        "title",
     )
     inlines = [ZoneInline]
     form = StockAdminForm
@@ -195,3 +202,31 @@ class StockAdmin(admin.ModelAdmin):
     )
     search_help_text = "title , address, description"
     list_per_page = 50
+
+
+@admin.register(History)
+class HistoryAdmin(admin.ModelAdmin):
+    list_display = (
+        "pk",
+        "date",
+        "user",
+        "item",
+        "count",
+        "full_old_address",
+        "full_new_address",
+    )
+    list_display_links = ("pk", "date",)
+    list_filter = ["date"]
+    ordering = ("-date",)
+    search_fields = (
+        "user__username",
+        "user__first_name",
+        "user__last_name",
+        "item__item_code",
+        "old_place__title",
+        "new_place__title",
+    )
+    list_per_page = 50
+
+    def get_readonly_fields(self, request, obj=None):
+        return [f.name for f in History._meta.fields]

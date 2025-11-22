@@ -1,7 +1,7 @@
 {% extends 'warehouse/inventory_header.html' %}
 {% load widget_tweaks %}
 
-{% block title %}Lot Inventory Search{% endblock %}
+{% block title %}Item Inventory Search{% endblock %}
 
 {% if messages %}
 {% for message in messages %}
@@ -14,7 +14,7 @@
     <div class="mb-2 p-1 border border-2 border-secondary rounded small bg-body-tertiary">
         <form method="get" class="mb-3">
 
-            {# Ошибки летят из forms.py/PlaceItemSearchForm.clean() #}
+            {# Ошибки летят из forms.py/ItemSearchForm.clean() #}
             {% if form.non_field_errors %}
             <div class="alert alert-danger">
                 {% for error in form.non_field_errors %}
@@ -24,6 +24,14 @@
             {% endif %}
 
             <div class="row g-1 align-items-end">
+
+                <div class="col-auto">
+                    {{ form.item_code.label_tag }}
+                    {{ form.item_code|add_class:"form-control form-control-sm" }}
+                    {% if form.item_code.errors %}
+                    <div class="text-danger small">{{ form.item_code.errors }}</div>
+                    {% endif %}
+                </div>
 
                 <div class="col-auto">
                     {{ form.stock.label_tag }}
@@ -50,14 +58,6 @@
                 </div>
 
                 <div class="col-auto">
-                    {{ form.item_code.label_tag }}
-                    {{ form.item_code|add_class:"form-control form-control-sm" }}
-                    {% if form.item_code.errors %}
-                    <div class="text-danger small">{{ form.item_code.errors }}</div>
-                    {% endif %}
-                </div>
-
-                <div class="col-auto">
                     {{ form.status.label_tag }}
                     {{ form.status|add_class:"form-select form-select-sm" }}
                     {% if form.status.errors %}
@@ -66,18 +66,18 @@
                 </div>
 
                 <div class="inventory-weight-qty-input col-auto">
-                    {{ form.qty_min.label_tag }}
-                    {{ form.qty_min|add_class:"form-control form-control-sm" }}
-                    {% if form.qty_min.errors %}
-                    <div class="text-danger small">{{ form.qty_min.errors }}</div>
+                    {{ form.weight_min.label_tag }}
+                    {{ form.weight_min|add_class:"form-control form-control-sm" }}
+                    {% if form.weight_min.errors %}
+                    <div class="text-danger small">{{ form.weight_min.errors }}</div>
                     {% endif %}
                 </div>
 
                 <div class="inventory-weight-qty-input col-auto">
-                    {{ form.qty_max.label_tag }}
-                    {{ form.qty_max|add_class:"form-control form-control-sm" }}
-                    {% if form.qty_max.errors %}
-                    <div class="text-danger small">{{ form.qty_max.errors }}</div>
+                    {{ form.weight_max.label_tag }}
+                    {{ form.weight_max|add_class:"form-control form-control-sm" }}
+                    {% if form.weight_max.errors %}
+                    <div class="text-danger small">{{ form.weight_max.errors }}</div>
                     {% endif %}
                 </div>
 
@@ -92,23 +92,23 @@
         <table class="table table-striped table-sm small mb-0">
             <thead class="table-light">
             <tr>
+                <th>Код товара</th>
                 <th>Склад</th>
                 <th>Зона</th>
                 <th>Место</th>
-                <th>Код товара</th>
                 <th>Статус</th>
-                <th>Кол-во</th>
+                <th>Вес г</th>
             </tr>
             </thead>
             <tbody>
             {% for pi in place_items %}
             <tr>
+                <td class="text-break">{{ pi.item.item_code }}</td>
                 <td>{{ pi.place.zone.stock.title }}</td>
                 <td>{{ pi.place.zone.title }}</td>
                 <td>{{ pi.place.title }}</td>
-                <td class="text-break">{{ pi.item.item_code }}</td>
                 <td>{{ pi.STATUS }}</td>
-                <td>{{ pi.quantity }}</td>
+                <td>{{ pi.item.weight }}</td>
             </tr>
             {% empty %}
             <tr>
@@ -178,5 +178,3 @@
     </nav>
 </div>
 {% endblock %}
-
-{% block scripts %}{% endblock %}

@@ -1,0 +1,28 @@
+{% extends 'warehouse/base.html' %}
+
+{% block page_title %}
+<b>Склад</b>
+{% endblock %}
+
+{% block page_subtitle %}
+<div class="flex-grow-1 d-flex justify-content-center">
+    <ul class="nav nav-pills gap-2 flex-wrap small">
+        <li class="nav-item">
+            <a class="nav-link py-1 px-3 {% if request.resolver_match.url_name == 'item-inventory-search' %}active{% endif %}"
+               href="{% url 'warehouse:item-inventory-search' %}">Поиск товара</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link py-1 px-3 {% if request.resolver_match.url_name == 'lot-inventory-search' %}active{% endif %}"
+               href="{% url 'warehouse:lot-inventory-search' %}">Поиск партии</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link py-1 px-3 {% if request.resolver_match.url_name == 'inventory-move' %}active{% endif %}"
+               href="{% url 'warehouse:inventory-move' %}">Перемещение товара</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link py-1 px-3 {% if request.resolver_match.url_name == 'inventory-history' %}active{% endif %}"
+               href="{% url 'warehouse:inventory-history' %}">История перемещений</a>
+        </li>
+    </ul>
+</div>
+{% endblock %}

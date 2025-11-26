@@ -1,18 +1,17 @@
 {% extends 'warehouse/inventory_header.html' %}
 {% load widget_tweaks %}
 
-{% block title %}Inventory History{% endblock %}
-
-{% if messages %}
-{% for message in messages %}
-<div class="alert alert-success">{{ message }}</div>
-{% endfor %}
-{% endif %}
+{% block title %}История{% endblock %}
 
 {% block body %}
 <div class="container-fluid p-2 ">
     <div class="mb-2 p-1 border border-2 border-secondary rounded small bg-body-tertiary">
         <form method="get" class="mb-3">
+            {% if messages %}
+            {% for message in messages %}
+            <div class="alert alert-success">{{ message }}</div>
+            {% endfor %}
+            {% endif %}
 
             {# Ошибки летят из forms.py/HistorySearchForm.clean() #}
             {% if form.non_field_errors %}
@@ -105,9 +104,9 @@
             <tr>
                 <td>{{ h.date|date:"d.m.Y H:i" }}</td>
                 <td>{{ h.user|default:"—" }}</td>
-                <td>{{ h.item.item_code }}</td>
-                <td>{{ h.old_place.full_address }}</td>
-                <td>{{ h.new_place.full_address }}</td>
+                <td>{{ h.item_code }}</td>
+                <td>{{ h.old_address }}</td>
+                <td>{{ h.new_address }}</td>
                 <td>{{ h.count }}</td>
             </tr>
             {% empty %}

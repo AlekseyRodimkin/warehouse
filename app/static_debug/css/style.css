@@ -14,3 +14,13 @@
     text-align: center;
     vertical-align: middle;
 }
+
+.structure-search-button {
+    text-decoration: none;
+    color: black;
+}
+
+.structure-search-button:hover {
+    text-decoration: underline;
+    color: blue;
+}

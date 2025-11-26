@@ -131,21 +131,13 @@ class PlaceItemAdmin(admin.ModelAdmin):
         "item",
     )
     search_fields = (
-        "place__title",
-        "item__item_code",
+        "full_address",
         "quantity",
     )
-    search_help_text = "place__title , item__item_code, quantity"
+    search_help_text = "full_address, quantity"
     list_editable = ("STATUS",)
     list_per_page = 50
-
-    def save_model(self, request, obj, form, change):
-        """
-        Создает временное поле _updated_by_user
-        Поле подхватывает сигнал для записи в History
-        """
-        obj._updated_by_user = request.user
-        super().save_model(request, obj, form, change)
+    readonly_fields = ("full_address",)
 
 
 @admin.register(Zone)
@@ -210,21 +202,21 @@ class HistoryAdmin(admin.ModelAdmin):
         "pk",
         "date",
         "user",
-        "item",
+        "item_code",
         "count",
-        "full_old_address",
-        "full_new_address",
+        "old_address",
+        "new_address",
     )
-    list_display_links = ("pk", "date",)
+    list_display_links = ("pk", "date", "item_code")
     list_filter = ["date"]
     ordering = ("-date",)
     search_fields = (
         "user__username",
         "user__first_name",
         "user__last_name",
-        "item__item_code",
-        "old_place__title",
-        "new_place__title",
+        "item_code",
+        "old_address",
+        "new_address",
     )
     list_per_page = 50
 

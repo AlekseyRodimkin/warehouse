@@ -81,6 +81,8 @@ class Place(models.Model):
 
     @property
     def description_short(self) -> str:
+        if not self.description:
+            return ""
         return (
             self.description
             if len(self.description) < 48
@@ -128,6 +130,7 @@ class PlaceItem(models.Model):
     )
     item = models.ForeignKey(Item, on_delete=models.CASCADE, related_name="place_items")
     quantity = models.PositiveIntegerField(default=1)
+    full_address = models.CharField(max_length=500, blank=True, db_index=True)
     STATUSES_CHOICES = [
         ("ok", "ok"),
         ("blk", "blk"),
@@ -142,20 +145,19 @@ class PlaceItem(models.Model):
         default="new",
     )
 
-    @property
-    def full_address(self) -> str:
+    def save(self, *args, **kwargs):
         """
-        Возвращает полный адрес
-        Если нет родителей: "place.title"
-        Если есть zone: "place.zone.title/place.title"
-        Если есть stock: "place.zone.stock.title/zone.title/place.title"
+        Автоматически заполняет full_address при каждом сохранении
+        строкой 'Stock.title/Zone.title/Place.title'
         """
         parts = [self.place.title]
         if self.place.zone:
             parts.insert(0, self.place.zone.title)
             if self.place.zone.stock:
                 parts.insert(0, self.place.zone.stock.title)
-        return "/".join(parts)
+        self.full_address = "/".join(parts)
+
+        super().save(*args, **kwargs)
 
     class Meta:
         ordering = ["pk"]
@@ -198,6 +200,8 @@ class Zone(models.Model):
 
     @property
     def description_short(self) -> str:
+        if not self.description:
+            return ""
         return (
             self.description
             if len(self.description) < 48
@@ -247,6 +251,8 @@ class Stock(models.Model):
 
     @property
     def description_short(self) -> str:
+        if not self.description:
+            return ""
         return (
             self.description
             if len(self.description) < 48
@@ -271,9 +277,9 @@ class History(models.Model):
     pk: int
     date: datetime: 2000-01-02 10:30:45.123456+00:00
     user: User
-    item: Item
-    old_place: str: Place
-    new_place: str: Place
+    item_code: str
+    old_place: str
+    new_place: str:
     """
 
     date = models.DateTimeField(auto_now_add=True)
@@ -284,46 +290,10 @@ class History(models.Model):
         blank=True
     )
 
-    item = models.ForeignKey(
-        Item,
-        on_delete=models.PROTECT
-    )
+    item_code = models.CharField(max_length=100, null=False, blank=False)
     count = models.PositiveIntegerField(default=1)
-    old_place = models.ForeignKey(
-        Place,
-        on_delete=models.PROTECT,
-        related_name="history_old_place",
-    )
-
-    new_place = models.ForeignKey(
-        Place,
-        on_delete=models.PROTECT,
-        related_name="history_new_place",
-    )
-
-    @property
-    def full_old_address(self) -> str:
-        """
-        Возвращает полный старый адрес
-        'stock.title/zone.title/place.title'
-        """
-        return "{stock}/{zone}/{place}".format(
-            stock=self.old_place.zone.stock.title,
-            zone=self.old_place.zone.title,
-            place=self.old_place.title,
-        )
-
-    @property
-    def full_new_address(self) -> str:
-        """
-        Возвращает полный новый адрес
-        'stock.title/zone.title/place.title'
-        """
-        return "{stock}/{zone}/{place}".format(
-            stock=self.new_place.zone.stock.title,
-            zone=self.new_place.zone.title,
-            place=self.new_place.title,
-        )
+    old_address = models.CharField(max_length=100, null=False, blank=False)
+    new_address = models.CharField(max_length=100, null=False, blank=False)
 
     class Meta:
         ordering = ["-date"]

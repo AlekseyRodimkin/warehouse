@@ -133,6 +133,14 @@ class HistorySearchForm(forms.Form):
 class MoveItemForm(forms.Form):
     """Форма на вкладке Перемещение товара"""
 
+    def save(self, commit=True):
+        instance = super().save(commit=False)
+        if self.request:
+            instance._current_user = self.request.user
+        if commit:
+            instance.save()
+        return instance
+
     # блок откуда ------------------------------------------------
     item_code = forms.CharField(
         max_length=100,
@@ -199,7 +207,7 @@ class MoveItemForm(forms.Form):
         """Дополнительная валидация форм"""
         cleaned_data = super().clean()
 
-        item_code = cleaned_data.get("item_code", "").strip().upper()
+        item_code = cleaned_data.get("item_code").strip().upper()
         quantity = cleaned_data.get("quantity")
         from_full_address = cleaned_data.get("from_full_address").strip().upper()
         from_stock = cleaned_data.get("from_stock")

@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'widget_tweaks',
     "accounts.apps.AccountsConfig",
     "warehouse.apps.WarehouseConfig",
+    "structure.apps.StructureConfig",
 ]
 
 MIDDLEWARE = [
@@ -102,12 +103,9 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-LANGUAGE_CODE = "en-us"
-
+LANGUAGE_CODE = "ru-RU"
 TIME_ZONE = "UTC"
-
 USE_I18N = True
-
 USE_TZ = True
 
 STATIC_URL = "/static/"
@@ -129,3 +127,4 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 LOGIN_REDIRECT_URL = reverse_lazy("warehouse:main")
 LOGIN_URL = "/accounts/login/"
+SESSION_EXPIRE_AT_BROWSER_CLOSE = True  # cессия до закрытия браузера

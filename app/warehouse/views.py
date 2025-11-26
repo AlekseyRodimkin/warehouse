@@ -166,11 +166,7 @@ class InventoryHistoryView(LoginRequiredMixin, ListView):
     paginate_by = 100
 
     def get_queryset(self):
-        qs = History.objects.select_related(
-            "item", "user",
-            "old_place__zone__stock",
-            "new_place__zone__stock"
-        ).order_by("-date")
+        qs = History.objects.order_by("-date")
 
         # Если нет GET-параметров - показываем пусто
         if not self.request.GET:
@@ -182,45 +178,36 @@ class InventoryHistoryView(LoginRequiredMixin, ListView):
 
         data = form.cleaned_data
 
-        # Поиск по складу (через old_place или new_place)
-        if data["stock"]:
-            stock_id = data["stock"].id
-            qs = qs.filter(
-                Q(old_place__zone__stock_id=stock_id) |
-                Q(new_place__zone__stock_id=stock_id)
-            )
-
-        # Поиск по зоне (по названию)
-        if data["zone"]:
-            qs = qs.filter(
-                Q(old_place__zone__title__icontains=data["zone"]) |
-                Q(new_place__zone__title__icontains=data["zone"])
-            )
-
-        # Поиск по месту (по названию)
-        if data["place"]:
-            qs = qs.filter(
-                Q(old_place__title__icontains=data["place"]) |
-                Q(new_place__title__icontains=data["place"])
-            )
-
-        # По коду товара
         if data["item_code"]:
-            qs = qs.filter(item__item_code__icontains=data["item_code"])
+            qs = qs.filter(item_code__icontains=data["item_code"].strip().upper())
 
-        # По пользователю
-        if data["user"]:
-            qs = qs.filter(
-                Q(user__username__icontains=data["user"]) |
-                Q(user__first_name__icontains=data["user"]) |
-                Q(user__last_name__icontains=data["user"])
-            )
+            search_text = ""
+            if data["stock"]:
+                search_text = data["stock"].title.strip().upper()
+            elif data["zone"]:
+                search_text = data["zone"].strip().upper()
+            elif data["place"]:
+                search_text = data["place"].strip().upper()
 
-        # По дате
-        if data["date_from"]:
-            qs = qs.filter(date__date__gte=data["date_from"])
-        if data["date_to"]:
-            qs = qs.filter(date__date__lte=data["date_to"])
+            if search_text:
+                qs = qs.filter(
+                    Q(old_address__icontains=search_text) |
+                    Q(new_address__icontains=search_text)
+                )
+
+            if data["user"]:
+                user_query = data["user"].strip()
+                qs = qs.filter(
+                    Q(user__username__icontains=user_query) |
+                    Q(user__first_name__icontains=user_query) |
+                    Q(user__last_name__icontains=user_query) |
+                    Q(user__email__icontains=user_query)
+                )
+
+            if data["date_from"]:
+                qs = qs.filter(date__date__gte=data["date_from"])
+            if data["date_to"]:
+                qs = qs.filter(date__date__lte=data["date_to"])
 
         return qs
 
@@ -285,12 +272,13 @@ class InventoryMoveView(LoginRequiredMixin, View):
 
                 History.objects.create(
                     user=request.user,
-                    item=item,
-                    old_place=place_item.place,
-                    new_place=to_place,
+                    item_code=item.item_code,
+                    old_address=place_item.full_address,
+                    new_address=to_place.full_address,
                     count=quantity,
                 )
-                messages.success(request, "Товар успешно перемещён")
+
+                messages.success(request, f"Товар #{item.item_code} перемещён")
                 return redirect("warehouse:inventory-move")
 
         return render(request, self.template_name, {"form": form})

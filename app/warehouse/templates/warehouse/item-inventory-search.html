@@ -1,18 +1,17 @@
 {% extends 'warehouse/inventory_header.html' %}
 {% load widget_tweaks %}
 
-{% block title %}Item Inventory Search{% endblock %}
-
-{% if messages %}
-{% for message in messages %}
-<div class="alert alert-success">{{ message }}</div>
-{% endfor %}
-{% endif %}
+{% block title %}Товары{% endblock %}
 
 {% block body %}
 <div class="container-fluid p-2 ">
     <div class="mb-2 p-1 border border-2 border-secondary rounded small bg-body-tertiary">
         <form method="get" class="mb-3">
+            {% if messages %}
+            {% for message in messages %}
+            <div class="alert alert-success">{{ message }}</div>
+            {% endfor %}
+            {% endif %}
 
             {# Ошибки летят из forms.py/ItemSearchForm.clean() #}
             {% if form.non_field_errors %}

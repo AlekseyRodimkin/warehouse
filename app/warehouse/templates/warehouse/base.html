@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <title>
         {% block title %}
-        <Базовый шаблон>
         {% endblock %}
     </title>
     {% load static %}
@@ -28,7 +27,7 @@
                     </svg>
                 </a>
                 <h5 class="mb-0 text-primary fw-bold d-none d-md-block">
-                    {% block page_title %}Транзакции{% endblock %}
+                    {% block page_title %}{% endblock %}
                 </h5>
             </div>
 

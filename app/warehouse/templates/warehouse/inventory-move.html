@@ -1,19 +1,19 @@
 {% extends 'warehouse/inventory_header.html' %}
 {% load widget_tweaks %}
 
-{% block title %}Inventory Move{% endblock %}
-
-{% if messages %}
-{% for message in messages %}
-<div class="alert alert-success">{{ message }}</div>
-{% endfor %}
-{% endif %}
+{% block title %}Перемещение{% endblock %}
 
 {% block body %}
-<div class="container-fluid p-2 ">
+<div class="container-fluid p-2">
     <div class="mb-2 p-2 border border-2 border-secondary rounded-4 small bg-body-tertiary">
         <form method="post" class="mb-3">
             {% csrf_token %}
+
+            {% if messages %}
+            {% for message in messages %}
+            <div class="alert alert-success">{{ message }}</div>
+            {% endfor %}
+            {% endif %}
 
             {# Ошибки летят из forms.py/MoveItemForm.clean() #}
             {% if form.non_field_errors %}
@@ -82,19 +82,33 @@
                     <div class="col-auto">
                         {{ form.to_full_address.label_tag }}
                         {{ form.to_full_address|add_class:"form-control form-select-sm" }}
+                        {% if form.to_full_address.errors %}
+                        <div class="text-danger small">{{ form.to_full_address.errors }}</div>
+                        {% endif %}
                     </div>
 
                     <div class="col-auto">
                         {{ form.to_stock.label_tag }}
                         {{ form.to_stock|add_class:"form-select form-select-sm" }}
+                        {% if form.to_stock.errors %}
+                        <div class="text-danger small">{{ form.to_stock.errors }}</div>
+                        {% endif %}
                     </div>
+
                     <div class="col-auto">
                         {{ form.to_zone.label_tag }}
                         {{ form.to_zone|add_class:"form-control form-select-sm" }}
+                        {% if form.to_zone.errors %}
+                        <div class="text-danger small">{{ form.to_zone.errors }}</div>
+                        {% endif %}
                     </div>
+
                     <div class="col-auto">
                         {{ form.to_place.label_tag }}
                         {{ form.to_place|add_class:"form-control form-select-sm" }}
+                        {% if form.to_place.errors %}
+                        <div class="text-danger small">{{ form.to_place.errors }}</div>
+                        {% endif %}
                     </div>
 
                 </div>

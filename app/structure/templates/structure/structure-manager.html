@@ -1,0 +1,70 @@
+{% extends 'structure/structure_header.html' %}
+{% load widget_tweaks %}
+
+{% block title %}Изменение структуры{% endblock %}
+
+{% block body %}
+<div class="container-fluid p-2">
+    <div class="mb-2 p-2 border border-2 border-secondary rounded-4 small bg-body-tertiary">
+        <form method="post" class="mb-3">
+            {% csrf_token %}
+
+            {% if messages %}
+            {% for message in messages %}
+            <div class="alert alert-success">{{ message }}</div>
+            {% endfor %}
+            {% endif %}
+
+            {# Ошибки летят из forms.py/StructureActionForm.clean() #}
+            {% if form.non_field_errors %}
+            <div class="alert alert-danger">
+                {% for error in form.non_field_errors %}
+                <div>{{ error }}</div>
+                {% endfor %}
+            </div>
+            {% endif %}
+
+            <div class="row g-1 align-items-end">
+                <div class="col-auto">
+                    {{ form.stock.label_tag }}
+                    {{ form.stock|add_class:"form-control form-control-sm" }}
+                    {% if form.stock.errors %}
+                    <div class="text-danger small">{{ form.stock.errors }}</div>
+                    {% endif %}
+                </div>
+                <div class="col-auto">
+                    {{ form.zone.label_tag }}
+                    {{ form.zone|add_class:"form-control form-control-sm" }}
+                    {% if form.zone.errors %}
+                    <div class="text-danger small">{{ form.zone.errors }}</div>
+                    {% endif %}
+                </div>
+                <div class="col-auto">
+                    {{ form.place.label_tag }}
+                    {{ form.place|add_class:"form-control form-control-sm" }}
+                    {% if form.place.errors %}
+                    <div class="text-danger small">{{ form.place.errors }}</div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="m-3">
+                {% for radio in form.action %}
+                <div class="form-check form-check-inline">
+                    {{ radio.tag }}
+                    <label class="form-check-label">{{ radio.choice_label }}</label>
+                </div>
+                {% endfor %}
+            </div>
+
+            <div class="col-12 text-center mt-4">
+                <button type="submit" class="btn btn-success btn">
+                    {{ form.action.value|default:"Подтвердить"|capfirst }}
+                </button>
+                <a href="{% url 'structure:structure-search' %}" class="btn btn-secondary btn">Структура</a>
+            </div>
+
+        </form>
+    </div>
+</div>
+{% endblock %}

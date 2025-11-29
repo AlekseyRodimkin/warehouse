@@ -1,30 +1,31 @@
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
 from django.db.models import Q
 from django.views.generic import ListView
-from django.contrib.auth.mixins import LoginRequiredMixin
 
 from .forms import StaffSearchForm
 
 
 class StaffSearchView(LoginRequiredMixin, ListView):
     """
-        Представление для поиска сотрудников
+    Представление для поиска сотрудников
 
-        Основная логика:
-        - Добавляет форму StaffSearchForm в контекст шаблона и валидирует ей входные параметры
-        - Выводит результаты постранично (100 элементов на страницу).
+    Основная логика:
+    - Добавляет форму StaffSearchForm в контекст шаблона и валидирует ей входные параметры
+    - Выводит результаты постранично (100 элементов на страницу).
 
-        Шаблон:
-            staff/staff-search.html
+    Шаблон:
+        staff/staff-search.html
 
-        Поддерживаемые параметры поиска:
-            работник      - частичное совпадение username / first_name / last_name / email
-            group         - фильтрация по группе
+    Поддерживаемые параметры поиска:
+        работник      - частичное совпадение username / first_name / last_name / email
+        group         - фильтрация по группе
 
-        Возвращает:
-            QuerySet - отфильтрованный набор ... или пустой набор
-                        при отсутствии параметров запроса.
-        """
+    Возвращает:
+        QuerySet - отфильтрованный набор ... или пустой набор
+                    при отсутствии параметров запроса.
+    """
+
     model = User
     template_name = "staff/staff-search.html"
     context_object_name = "users"
@@ -43,16 +44,16 @@ class StaffSearchView(LoginRequiredMixin, ListView):
             if data["user"]:
                 query = data["user"].strip().lower()
                 qs = qs.filter(
-                    Q(username__icontains=query) |
-                    Q(first_name__icontains=query) |
-                    Q(last_name__icontains=query) |
-                    Q(email__icontains=query)
+                    Q(username__icontains=query)
+                    | Q(first_name__icontains=query)
+                    | Q(last_name__icontains=query)
+                    | Q(email__icontains=query)
                 )
 
             if data["group"]:
                 qs = qs.filter(groups__name=data["group"])
             qs = qs.distinct()
-            qs = qs.order_by('last_name', 'first_name', 'username')
+            qs = qs.order_by("last_name", "first_name", "username")
 
         else:
             return qs.none()
@@ -61,8 +62,8 @@ class StaffSearchView(LoginRequiredMixin, ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['form'] = StaffSearchForm(self.request.GET or None)
+        context["form"] = StaffSearchForm(self.request.GET or None)
         user = self.request.user
-        context['user_is_admin'] = user.is_superuser
-        context['user_is_director'] = user.groups.filter(name='директор').exists()
+        context["user_is_admin"] = user.is_superuser
+        context["user_is_director"] = user.groups.filter(name="директор").exists()
         return context

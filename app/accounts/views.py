@@ -34,5 +34,5 @@ class MeView(TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         user = self.request.user
-        context['user_is_admin'] = user.is_superuser
+        context["user_is_admin"] = user.is_superuser
         return context

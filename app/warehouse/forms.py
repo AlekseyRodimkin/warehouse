@@ -1,5 +1,6 @@
 from django import forms
-from .models import Stock, Zone, Place, Item, PlaceItem
+
+from .models import Item, Place, PlaceItem, Stock, Zone
 
 # Статусы продублированы от Models.PlaceItem.STATUS_CHOICES
 STATUS_CHOICES = [
@@ -13,112 +14,137 @@ STATUS_CHOICES = [
 
 class PlaceItemSearchForm(forms.Form):
     """Форма поиска на вкладке Поиск Партии"""
-    stock = forms.ModelChoiceField(queryset=Stock.objects.all(), required=False, label="Склад")
+
+    stock = forms.ModelChoiceField(
+        queryset=Stock.objects.all(), required=False, label="Склад"
+    )
     zone = forms.CharField(
         max_length=100,
         required=False,
         label="Зона",
-        widget=forms.TextInput(attrs={"placeholder": "Зона", "class": "form-control"})
+        widget=forms.TextInput(attrs={"placeholder": "Зона", "class": "form-control"}),
     )
     place = forms.CharField(
         max_length=100,
         required=False,
         label="Место",
-        widget=forms.TextInput(attrs={"placeholder": "Место", "class": "form-control"})
+        widget=forms.TextInput(attrs={"placeholder": "Место", "class": "form-control"}),
     )
     item_code = forms.CharField(
         max_length=100,
         required=False,
         label="Код товара",
-        widget=forms.TextInput(attrs={"placeholder": "Код товара", "class": "form-control"})
+        widget=forms.TextInput(
+            attrs={"placeholder": "Код товара", "class": "form-control"}
+        ),
     )
     status = forms.ChoiceField(choices=[("", "---")] + STATUS_CHOICES, required=False)
     qty_min = forms.IntegerField(
         required=False,
         min_value=1,
         label="Кол-во мин",
-        widget=forms.NumberInput(attrs={"placeholder": "Кол-во мин", "class": "form-control"})
+        widget=forms.NumberInput(
+            attrs={"placeholder": "Кол-во мин", "class": "form-control"}
+        ),
     )
     qty_max = forms.IntegerField(
         required=False,
         min_value=1,
         label="Кол-во макс",
-        widget=forms.NumberInput(attrs={"placeholder": "Кол-во макс", "class": "form-control"})
+        widget=forms.NumberInput(
+            attrs={"placeholder": "Кол-во макс", "class": "form-control"}
+        ),
     )
 
 
 class ItemSearchForm(forms.Form):
     """Форма поиска на вкладке Поиск товара"""
-    stock = forms.ModelChoiceField(queryset=Stock.objects.all(), required=False, label="Склад")
+
+    stock = forms.ModelChoiceField(
+        queryset=Stock.objects.all(), required=False, label="Склад"
+    )
     zone = forms.CharField(
         max_length=100,
         required=False,
         label="Зона",
-        widget=forms.TextInput(attrs={"placeholder": "Зона", "class": "form-control"})
+        widget=forms.TextInput(attrs={"placeholder": "Зона", "class": "form-control"}),
     )
     place = forms.CharField(
         max_length=100,
         required=False,
         label="Место",
-        widget=forms.TextInput(attrs={"placeholder": "Место", "class": "form-control"})
+        widget=forms.TextInput(attrs={"placeholder": "Место", "class": "form-control"}),
     )
     item_code = forms.CharField(
         max_length=100,
         required=False,
         label="Код товара",
-        widget=forms.TextInput(attrs={"placeholder": "Код товара", "class": "form-control"})
+        widget=forms.TextInput(
+            attrs={"placeholder": "Код товара", "class": "form-control"}
+        ),
     )
     status = forms.ChoiceField(choices=[("", "---")] + STATUS_CHOICES, required=False)
     weight_min = forms.IntegerField(
         required=False,
         min_value=1,
         label="Вес мин г",
-        widget=forms.NumberInput(attrs={"placeholder": "Вес мин г", "class": "form-control"})
+        widget=forms.NumberInput(
+            attrs={"placeholder": "Вес мин г", "class": "form-control"}
+        ),
     )
     weight_max = forms.IntegerField(
         required=False,
         min_value=1,
         label="Вес макс г",
-        widget=forms.NumberInput(attrs={"placeholder": "Вес макс г", "class": "form-control"})
+        widget=forms.NumberInput(
+            attrs={"placeholder": "Вес макс г", "class": "form-control"}
+        ),
     )
 
 
 class HistorySearchForm(forms.Form):
     """Форма поиска на вкладке История перемещений"""
-    stock = forms.ModelChoiceField(queryset=Stock.objects.all(), required=False, label="Склад")
+
+    stock = forms.ModelChoiceField(
+        queryset=Stock.objects.all(), required=False, label="Склад"
+    )
     zone = forms.CharField(
         max_length=100,
         required=False,
         label="Зона",
-        widget=forms.TextInput(attrs={"placeholder": "Зона", "class": "form-control"})
+        widget=forms.TextInput(attrs={"placeholder": "Зона", "class": "form-control"}),
     )
     place = forms.CharField(
         max_length=100,
         required=False,
         label="Место",
-        widget=forms.TextInput(attrs={"placeholder": "Место", "class": "form-control"})
+        widget=forms.TextInput(attrs={"placeholder": "Место", "class": "form-control"}),
     )
     item_code = forms.CharField(
         max_length=100,
         required=False,
         label="Код товара",
-        widget=forms.TextInput(attrs={"placeholder": "Код товара", "class": "form-control"})
+        widget=forms.TextInput(
+            attrs={"placeholder": "Код товара", "class": "form-control"}
+        ),
     )
     date_from = forms.DateField(
         required=False,
         label="Дата от",
-        widget=forms.DateInput(attrs={"type": "date", "class": "form-control"})
+        widget=forms.DateInput(attrs={"type": "date", "class": "form-control"}),
     )
     date_to = forms.DateField(
         required=False,
         label="Дата до",
-        widget=forms.DateInput(attrs={"type": "date", "class": "form-control"})
+        widget=forms.DateInput(attrs={"type": "date", "class": "form-control"}),
     )
     user = forms.CharField(
         max_length=150,
         required=False,
         label="Работник",
-        widget=forms.TextInput(attrs={"placeholder": "Работник", "class": "form-control"})
+        widget=forms.TextInput(
+            attrs={"placeholder": "Работник", "class": "form-control"}
+        ),
     )
 
     def clean(self):
@@ -146,7 +172,9 @@ class MoveItemForm(forms.Form):
         max_length=100,
         required=True,
         label="Код товара",
-        widget=forms.TextInput(attrs={"placeholder": "Код товара", "class": "form-control"})
+        widget=forms.TextInput(
+            attrs={"placeholder": "Код товара", "class": "form-control"}
+        ),
     )
     from_stock = forms.ModelChoiceField(
         required=False,
@@ -157,25 +185,27 @@ class MoveItemForm(forms.Form):
         max_length=100,
         required=False,
         label="Зона",
-        widget=forms.TextInput(attrs={"placeholder": "Зона", "class": "form-control"})
+        widget=forms.TextInput(attrs={"placeholder": "Зона", "class": "form-control"}),
     )
     from_place = forms.CharField(
         max_length=100,
         required=False,
         label="Место",
-        widget=forms.TextInput(attrs={"placeholder": "Место", "class": "form-control"})
+        widget=forms.TextInput(attrs={"placeholder": "Место", "class": "form-control"}),
     )
     quantity = forms.IntegerField(
         min_value=1,
         initial=1,
         label="Количество",
-        widget=forms.NumberInput(attrs={"class": "form-control", "style": "width: 100px;"})
+        widget=forms.NumberInput(
+            attrs={"class": "form-control", "style": "width: 100px;"}
+        ),
     )
     from_full_address = forms.CharField(
         max_length=100,
         required=False,
         label="Полный адрес",
-        widget=forms.TextInput(attrs={"placeholder": "1/A/1", "class": "form-control"})
+        widget=forms.TextInput(attrs={"placeholder": "1/A/1", "class": "form-control"}),
     )
 
     # блок куда ------------------------------------------------
@@ -188,19 +218,19 @@ class MoveItemForm(forms.Form):
         max_length=100,
         required=False,
         label="Зона",
-        widget=forms.TextInput(attrs={"placeholder": "Зона", "class": "form-control"})
+        widget=forms.TextInput(attrs={"placeholder": "Зона", "class": "form-control"}),
     )
     to_place = forms.CharField(
         max_length=100,
         required=False,
         label="Место",
-        widget=forms.TextInput(attrs={"placeholder": "Место", "class": "form-control"})
+        widget=forms.TextInput(attrs={"placeholder": "Место", "class": "form-control"}),
     )
     to_full_address = forms.CharField(
         max_length=100,
         required=False,
         label="Полный адрес",
-        widget=forms.TextInput(attrs={"placeholder": "1/A/1", "class": "form-control"})
+        widget=forms.TextInput(attrs={"placeholder": "1/A/1", "class": "form-control"}),
     )
 
     def clean(self):
@@ -231,9 +261,7 @@ class MoveItemForm(forms.Form):
             from_place = self._place_from_full_address(from_full_address)
         else:
             from_place = self._place_from_parts(
-                stock=from_stock,
-                zone=from_zone,
-                place=from_place
+                stock=from_stock, zone=from_zone, place=from_place
             )
 
         if not from_place:
@@ -244,9 +272,7 @@ class MoveItemForm(forms.Form):
             to_place = self._place_from_full_address(to_full_address)
         else:
             to_place = self._place_from_parts(
-                stock=to_stock,
-                zone=to_zone,
-                place=to_place
+                stock=to_stock, zone=to_zone, place=to_place
             )
 
         if not to_place:
@@ -258,7 +284,9 @@ class MoveItemForm(forms.Form):
         try:
             place_item = PlaceItem.objects.get(place=from_place, item=item)
             if place_item.quantity < quantity:
-                raise forms.ValidationError(f"Недостаточно товара: есть {place_item.quantity} шт.")
+                raise forms.ValidationError(
+                    f"Недостаточно товара: есть {place_item.quantity} шт."
+                )
         except PlaceItem.DoesNotExist:
             raise forms.ValidationError("Товара нет на указанном месте ОТКУДА")
 
@@ -279,14 +307,18 @@ class MoveItemForm(forms.Form):
         zone_title = parts[-2] if len(parts) >= 2 else None
         stock_title = parts[0] if len(parts) >= 3 else None
 
-        return self._find_place(stock_title=stock_title, zone_title=zone_title, place_title=place_title)
+        return self._find_place(
+            stock_title=stock_title, zone_title=zone_title, place_title=place_title
+        )
 
     def _place_from_parts(self, stock=None, zone=None, place=None):
         if not place:
             return None
         return self._find_place(stock=stock, zone_title=zone, place_title=place)
 
-    def _find_place(self, stock=None, stock_title=None, zone_title=None, place_title=None):
+    def _find_place(
+        self, stock=None, stock_title=None, zone_title=None, place_title=None
+    ):
         """Универсальный поиск места"""
         if not place_title:
             return None

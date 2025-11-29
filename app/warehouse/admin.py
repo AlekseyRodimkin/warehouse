@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib import admin
 
-from .models import Item, Place, PlaceItem, Stock, Zone, History
+from .models import History, Item, Place, PlaceItem, Stock, Zone
 
 """
 Опции административной панели
@@ -104,7 +104,9 @@ class PlaceAdmin(admin.ModelAdmin):
         "created_at",
     )
     list_display_links = (
-        "pk", "full_address", "description_short",
+        "pk",
+        "full_address",
+        "description_short",
     )
     ordering = (
         "pk",
@@ -124,7 +126,10 @@ class PlaceAdmin(admin.ModelAdmin):
 @admin.register(PlaceItem)
 class PlaceItemAdmin(admin.ModelAdmin):
     list_display = ("full_address", "item", "quantity", "STATUS")
-    list_display_links = ("full_address", "item",)
+    list_display_links = (
+        "full_address",
+        "item",
+    )
     ordering = ("place",)
     autocomplete_fields = (
         "place",

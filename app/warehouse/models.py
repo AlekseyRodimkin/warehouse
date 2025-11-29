@@ -294,10 +294,7 @@ class History(models.Model):
 
     date = models.DateTimeField(auto_now_add=True)
     user = models.ForeignKey(
-        get_user_model(),
-        on_delete=models.PROTECT,
-        null=True,
-        blank=True
+        get_user_model(), on_delete=models.PROTECT, null=True, blank=True
     )
 
     item_code = models.CharField(max_length=100, null=False, blank=False)

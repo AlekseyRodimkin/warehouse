@@ -1,4 +1,4 @@
 lint:
 	black .
 	isort .
-	pylint dimplom/
+	pylint app/

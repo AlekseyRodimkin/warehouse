@@ -1,15 +1,15 @@
+from django.contrib import messages
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db import transaction
 from django.db.models import Q
 from django.http import HttpRequest, HttpResponse
-from django.shortcuts import render
+from django.shortcuts import get_object_or_404, redirect, render
 from django.views import View
 from django.views.generic import ListView, TemplateView
-from django.contrib.auth.mixins import LoginRequiredMixin
-from django.shortcuts import get_object_or_404, redirect
-from django.contrib import messages
 
-from .models import PlaceItem, Item, History
-from .forms import PlaceItemSearchForm, ItemSearchForm, HistorySearchForm, MoveItemForm
+from .forms import (HistorySearchForm, ItemSearchForm, MoveItemForm,
+                    PlaceItemSearchForm)
+from .models import History, Item, PlaceItem
 
 
 class MainView(TemplateView):
@@ -17,47 +17,53 @@ class MainView(TemplateView):
     Функция главной страницы.
     Добавляет в контекст принадлежность пользователя конкретным группам для отображения кнопок
     """
-    template_name = 'warehouse/main.html'
+
+    template_name = "warehouse/main.html"
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         user = self.request.user
-        context['user_is_admin'] = user.is_superuser
-        context['user_is_director'] = user.groups.filter(name='директор').exists()
+        context["user_is_admin"] = user.is_superuser
+        context["user_is_director"] = user.groups.filter(name="директор").exists()
         return context
 
 
 class InventoryLotSearchView(LoginRequiredMixin, ListView):
     """
-        Представление для поиска партий товаров на складе.
+    Представление для поиска партий товаров на складе.
 
-        Основная логика:
-        - Добавляет форму PlaceItemSearchForm в контекст шаблона и валидирует ей входные параметры
-        - Выводит результаты постранично (100 элементов на страницу).
+    Основная логика:
+    - Добавляет форму PlaceItemSearchForm в контекст шаблона и валидирует ей входные параметры
+    - Выводит результаты постранично (100 элементов на страницу).
 
-        Шаблон:
-            warehouse/lot-inventory-search.html
+    Шаблон:
+        warehouse/lot-inventory-search.html
 
-        Поддерживаемые параметры поиска:
-            stock      - фильтрация по складу
-            zone       - частичное совпадение названия зоны
-            place      - частичное совпадение названия места хранения
-            item_code  - частичное совпадение кода товара
-            status     - точное совпадение статуса
-            qty_min    - минимальное количество
-            qty_max    - максимальное количество
+    Поддерживаемые параметры поиска:
+        stock      - фильтрация по складу
+        zone       - частичное совпадение названия зоны
+        place      - частичное совпадение названия места хранения
+        item_code  - частичное совпадение кода товара
+        status     - точное совпадение статуса
+        qty_min    - минимальное количество
+        qty_max    - максимальное количество
 
-        Возвращает:
-            QuerySet - отфильтрованный набор PlaceItem или пустой набор
-                        при отсутствии параметров запроса.
-        """
+    Возвращает:
+        QuerySet - отфильтрованный набор PlaceItem или пустой набор
+                    при отсутствии параметров запроса.
+    """
+
     model = PlaceItem
     template_name = "warehouse/lot-inventory-search.html"
     context_object_name = "place_items"
     paginate_by = 100
 
     def get_queryset(self):
-        qs = super().get_queryset().select_related('item', 'place', 'place__zone', 'place__zone__stock')
+        qs = (
+            super()
+            .get_queryset()
+            .select_related("item", "place", "place__zone", "place__zone__stock")
+        )
         form = PlaceItemSearchForm(self.request.GET)
 
         if not self.request.GET:
@@ -83,41 +89,46 @@ class InventoryLotSearchView(LoginRequiredMixin, ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['form'] = PlaceItemSearchForm(self.request.GET)
+        context["form"] = PlaceItemSearchForm(self.request.GET)
         return context
 
 
 class InventoryItemSearchView(LoginRequiredMixin, ListView):
     """
-        Представление для поиска товаров на складе.
+    Представление для поиска товаров на складе.
 
-        Основная логика:
-        - Добавляет форму PlaceItemSearchForm в контекст шаблона и валидирует ей входные параметры
-        - Выводит результаты постранично (100 элементов на страницу).
+    Основная логика:
+    - Добавляет форму PlaceItemSearchForm в контекст шаблона и валидирует ей входные параметры
+    - Выводит результаты постранично (100 элементов на страницу).
 
-        Шаблон:
-            warehouse/item-inventory-search.html
+    Шаблон:
+        warehouse/item-inventory-search.html
 
-        Поддерживаемые параметры поиска:
-            stock      - фильтрация по складу
-            zone       - частичное совпадение названия зоны
-            place      - частичное совпадение названия места хранения
-            item_code  - частичное совпадение кода товара
-            status     - точное совпадение статуса
-            weight_min - минимальный вес
-            weight_max - максимальный вес
+    Поддерживаемые параметры поиска:
+        stock      - фильтрация по складу
+        zone       - частичное совпадение названия зоны
+        place      - частичное совпадение названия места хранения
+        item_code  - частичное совпадение кода товара
+        status     - точное совпадение статуса
+        weight_min - минимальный вес
+        weight_max - максимальный вес
 
-        Возвращает:
-            QuerySet - отфильтрованный набор PlaceItem или пустой набор
-                        при отсутствии параметров запроса.
-        """
+    Возвращает:
+        QuerySet - отфильтрованный набор PlaceItem или пустой набор
+                    при отсутствии параметров запроса.
+    """
+
     model = PlaceItem
     template_name = "warehouse/item-inventory-search.html"
     context_object_name = "place_items"
     paginate_by = 100
 
     def get_queryset(self):
-        qs = super().get_queryset().select_related('item', 'place', 'place__zone', 'place__zone__stock')
+        qs = (
+            super()
+            .get_queryset()
+            .select_related("item", "place", "place__zone", "place__zone__stock")
+        )
         form = PlaceItemSearchForm(self.request.GET)
 
         if not self.request.GET:
@@ -143,33 +154,34 @@ class InventoryItemSearchView(LoginRequiredMixin, ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['form'] = ItemSearchForm(self.request.GET)
+        context["form"] = ItemSearchForm(self.request.GET)
         return context
 
 
 class InventoryHistoryView(LoginRequiredMixin, ListView):
     """
-        Представление для поиска истории перемещения.
+    Представление для поиска истории перемещения.
 
-        Основная логика:
-        - Добавляет форму HistorySearchForm в контекст шаблона и валидирует ей входные параметры
-        - Выводит результаты постранично (100 элементов на страницу).
+    Основная логика:
+    - Добавляет форму HistorySearchForm в контекст шаблона и валидирует ей входные параметры
+    - Выводит результаты постранично (100 элементов на страницу).
 
-        Шаблон:
-            warehouse/inventory-history.html
+    Шаблон:
+        warehouse/inventory-history.html
 
-        Поддерживаемые параметры поиска:
-            stock      - фильтрация по складу
-            zone       - частичное совпадение названия зоны
-            place      - частичное совпадение названия места хранения
-            item_code  - частичное совпадение кода товара
-            date       - дата
-            работник   - частичное совпадение username / first_name / last_name / email
+    Поддерживаемые параметры поиска:
+        stock      - фильтрация по складу
+        zone       - частичное совпадение названия зоны
+        place      - частичное совпадение названия места хранения
+        item_code  - частичное совпадение кода товара
+        date       - дата
+        работник   - частичное совпадение username / first_name / last_name / email
 
-        Возвращает:
-            QuerySet - отфильтрованный набор History или пустой набор
-                        при отсутствии параметров запроса.
-        """
+    Возвращает:
+        QuerySet - отфильтрованный набор History или пустой набор
+                    при отсутствии параметров запроса.
+    """
+
     model = History
     template_name = "warehouse/inventory-history.html"
     context_object_name = "histories"
@@ -201,17 +213,17 @@ class InventoryHistoryView(LoginRequiredMixin, ListView):
 
             if search_text:
                 qs = qs.filter(
-                    Q(old_address__icontains=search_text) |
-                    Q(new_address__icontains=search_text)
+                    Q(old_address__icontains=search_text)
+                    | Q(new_address__icontains=search_text)
                 )
 
             if data["user"]:
                 user_query = data["user"].strip()
                 qs = qs.filter(
-                    Q(user__username__icontains=user_query) |
-                    Q(user__first_name__icontains=user_query) |
-                    Q(user__last_name__icontains=user_query) |
-                    Q(user__email__icontains=user_query)
+                    Q(user__username__icontains=user_query)
+                    | Q(user__first_name__icontains=user_query)
+                    | Q(user__last_name__icontains=user_query)
+                    | Q(user__email__icontains=user_query)
                 )
 
             if data["date_from"]:
@@ -230,25 +242,26 @@ class InventoryHistoryView(LoginRequiredMixin, ListView):
 
 class InventoryMoveView(LoginRequiredMixin, View):
     """
-        Представление для перемещения товара.
+    Представление для перемещения товара.
 
-        Основная логика:
-        - Добавляет форму MoveItemForm в контекст шаблона и валидирует ей входные параметры
-        - Выводит результат о совершении перемещения (сообщение).
+    Основная логика:
+    - Добавляет форму MoveItemForm в контекст шаблона и валидирует ей входные параметры
+    - Выводит результат о совершении перемещения (сообщение).
 
-        Шаблон:
-            warehouse/inventory-move.html
+    Шаблон:
+        warehouse/inventory-move.html
 
-        Поддерживаемые параметры поиска:
-            item_code    - частичное совпадение кода товара
-            full_address - полный адрес (Склад/Зона/Место)
-            stock        - фильтрация по складу
-            zone         - частичное совпадение названия зоны
-            place        - частичное совпадение названия места хранения
+    Поддерживаемые параметры поиска:
+        item_code    - частичное совпадение кода товара
+        full_address - полный адрес (Склад/Зона/Место)
+        stock        - фильтрация по складу
+        zone         - частичное совпадение названия зоны
+        place        - частичное совпадение названия места хранения
 
-        Возвращает:
-            Перенаправление на страницу перемещения
-        """
+    Возвращает:
+        Перенаправление на страницу перемещения
+    """
+
     template_name = "warehouse/inventory-move.html"
 
     def get(self, request):
@@ -273,7 +286,7 @@ class InventoryMoveView(LoginRequiredMixin, View):
                 to_pi, created = PlaceItem.objects.get_or_create(
                     place=to_place,
                     item=item,
-                    defaults={"quantity": quantity, "STATUS": "ok"}
+                    defaults={"quantity": quantity, "STATUS": "ok"},
                 )
                 if not created:
                     to_pi.quantity += quantity

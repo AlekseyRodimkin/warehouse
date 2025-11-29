@@ -11,9 +11,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.getenv("DJANGO_SECRET_KEY")
 
 ALLOWED_HOSTS = [
-                    "0.0.0.0",
-                    "127.0.0.1",
-                ] + os.getenv(
+    "0.0.0.0",
+    "127.0.0.1",
+] + os.getenv(
     "DJANGO_ALLOWED_HOSTS", ""
 ).split(",")
 
@@ -38,7 +38,7 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    'widget_tweaks',
+    "widget_tweaks",
     "accounts.apps.AccountsConfig",
     "warehouse.apps.WarehouseConfig",
     "structure.apps.StructureConfig",

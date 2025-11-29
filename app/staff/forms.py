@@ -10,10 +10,15 @@ GROUP_CHOICES = [
 
 class StaffSearchForm(forms.Form):
     """Форма на вкладке Поиск персонала"""
+
     user = forms.CharField(
         max_length=100,
         required=False,
         label="Работник",
-        widget=forms.TextInput(attrs={"placeholder": "Работник", "class": "form-control"})
+        widget=forms.TextInput(
+            attrs={"placeholder": "Работник", "class": "form-control"}
+        ),
     )
-    group = forms.ChoiceField(choices=[("", "---")] + GROUP_CHOICES, required=False, label="Группа")
+    group = forms.ChoiceField(
+        choices=[("", "---")] + GROUP_CHOICES, required=False, label="Группа"
+    )

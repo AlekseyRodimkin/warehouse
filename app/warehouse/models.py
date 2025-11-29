@@ -40,6 +40,8 @@ class Item(models.Model):
 
     class Meta:
         ordering = ["item_code"]
+        verbose_name = "Товар"
+        verbose_name_plural = "Товары"
 
     #     indexes = [
     #         models.Index(fields=['item_code', 'created_at']),
@@ -106,6 +108,8 @@ class Place(models.Model):
 
     class Meta:
         ordering = ["title"]
+        verbose_name = "Место"
+        verbose_name_plural = "Места"
 
     #     indexes = [
     #         models.Index(fields=['title', ]),
@@ -165,6 +169,8 @@ class PlaceItem(models.Model):
             "place",
             "item",
         )  # Один товар не может дублироваться в одном месте
+        verbose_name = "Ячейка Деталь"
+        verbose_name_plural = "Ячейки Детали"
 
     def __str__(self):
         return f"{self.item.item_code} x{self.quantity} @ {self.place.title}"
@@ -222,6 +228,8 @@ class Zone(models.Model):
 
     class Meta:
         ordering = ["title"]
+        verbose_name = "Зона"
+        verbose_name_plural = "Зоны"
 
     def __str__(self):
         return f"{self.title}"
@@ -261,13 +269,15 @@ class Stock(models.Model):
 
     class Meta:
         ordering = ["pk"]
+        verbose_name = "Склад"
+        verbose_name_plural = "Склады"
 
-    #     indexes = [
-    #         models.Index(fields=['title', 'address', 'created_at']),
-    #     ]
+        #     indexes = [
+        #         models.Index(fields=['title', 'address', 'created_at']),
+        #     ]
 
-    def __str__(self):
-        return f"{self.title}"
+        def __str__(self):
+            return f"{self.title}"
 
 
 class History(models.Model):
@@ -297,6 +307,8 @@ class History(models.Model):
 
     class Meta:
         ordering = ["-date"]
+        verbose_name = "История перемещений"
+        verbose_name_plural = "Истории перемещений"
 
     def __str__(self):
         return f"History #{self.pk}"

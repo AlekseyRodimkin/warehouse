@@ -1,8 +1,8 @@
- #themeIcon {
+#themeIcon {
     font-size: 28px;
  }
 
- .inventory-weight-qty-input {
+.inventory-weight-qty-input {
     max-width: 125px;
  }
 
@@ -17,7 +17,6 @@
 
 .structure-search-button {
     text-decoration: none;
-    color: black;
 }
 
 .structure-search-button:hover {

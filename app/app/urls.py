@@ -1,9 +1,11 @@
 from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
+from django.shortcuts import redirect
 from django.urls import include, path
 
 urlpatterns = [
+    path("", lambda request: redirect("warehouse:main"), name="root_redirect"),
     path("admin/", admin.site.urls),
     path("accounts/", include("accounts.urls")),
     path("warehouse/", include("warehouse.urls")),

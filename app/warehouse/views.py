@@ -3,7 +3,7 @@ from django.db.models import Q
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import render
 from django.views import View
-from django.views.generic import ListView
+from django.views.generic import ListView, TemplateView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import get_object_or_404, redirect
 from django.contrib import messages
@@ -12,9 +12,19 @@ from .models import PlaceItem, Item, History
 from .forms import PlaceItemSearchForm, ItemSearchForm, HistorySearchForm, MoveItemForm
 
 
-def main(request: HttpRequest) -> HttpResponse:
-    """Функция главной страницы"""
-    return render(request, "warehouse/main.html")
+class MainView(TemplateView):
+    """
+    Функция главной страницы.
+    Добавляет в контекст принадлежность пользователя конкретным группам для отображения кнопок
+    """
+    template_name = 'warehouse/main.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        user = self.request.user
+        context['user_is_admin'] = user.is_superuser
+        context['user_is_director'] = user.groups.filter(name='директор').exists()
+        return context
 
 
 class InventoryLotSearchView(LoginRequiredMixin, ListView):

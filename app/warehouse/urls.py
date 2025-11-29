@@ -2,7 +2,7 @@ from django.contrib.auth.views import LoginView
 from django.urls import path
 
 from .views import (
-    main,
+    MainView,
     InventoryLotSearchView,
     InventoryItemSearchView,
     InventoryHistoryView,
@@ -12,7 +12,7 @@ from .views import (
 app_name = "warehouse"
 
 urlpatterns = [
-    path("", main, name="main"),
+    path("", MainView.as_view(), name="main"),
     path("inventory/search/lot/", InventoryLotSearchView.as_view(), name="lot-inventory-search"),
     path("inventory/search/item/", InventoryItemSearchView.as_view(), name="item-inventory-search"),
     path("inventory/move/", InventoryMoveView.as_view(), name="inventory-move"),

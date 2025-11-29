@@ -1,5 +1,5 @@
 from django.contrib import messages
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.shortcuts import render, redirect
 from django.views.generic import FormView, ListView
 from django.db import transaction
@@ -8,9 +8,11 @@ from .forms import StructureActionForm, StructureSearchForm
 from warehouse.models import Stock, Zone, Place
 
 
-class StructureManagerView(LoginRequiredMixin, FormView):
+class StructureManagerView(LoginRequiredMixin, PermissionRequiredMixin, FormView):
     """
-        Представление для создания / удаления склада / зоны / места.
+        Представление для создания-удаления склада / зоны / места.
+        Требует разрешения:
+        - Создание / изменение / 
 
         Основная логика:
         - Добавляет форму StructureActionForm в контекст шаблона и валидирует ей входные параметры
@@ -29,6 +31,17 @@ class StructureManagerView(LoginRequiredMixin, FormView):
         """
     template_name = "structure/structure-manager.html"
     form_class = StructureActionForm
+    permission_required = [
+        "warehouse.add_place",
+        "warehouse.delete_place",
+        "warehouse.change_place",
+        "warehouse.add_zone",
+        "warehouse.delete_zone",
+        "warehouse.change_zone",
+        "warehouse.add_stock",
+        "warehouse.delete_stock",
+        "warehouse.change_stock",
+    ]
 
     def form_valid(self, form):
         user_display = (self.request.user.get_full_name().strip() or

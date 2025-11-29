@@ -16,7 +16,7 @@ class AppLogoutView(LogoutView):
 class RegisterView(CreateView):
     form_class = UserCreationForm
     template_name = "accounts/register.html"
-    success_url = reverse_lazy("warehouse:base")
+    success_url = reverse_lazy("warehouse:main")
 
     def form_valid(self, form):
         response = super().form_valid(form)
@@ -30,3 +30,9 @@ class RegisterView(CreateView):
 
 class MeView(TemplateView):
     template_name = "accounts/me.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        user = self.request.user
+        context['user_is_admin'] = user.is_superuser
+        return context

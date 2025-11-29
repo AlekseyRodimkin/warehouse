@@ -126,5 +126,5 @@ MEDIA_ROOT.mkdir(exist_ok=True)
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 LOGIN_REDIRECT_URL = reverse_lazy("warehouse:main")
-LOGIN_URL = "/accounts/login/"
+LOGIN_URL = reverse_lazy("accounts:login")
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True  # cессия до закрытия браузера

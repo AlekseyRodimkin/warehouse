@@ -4,14 +4,22 @@ from django.db.models import CASCADE
 
 
 class Profile(models.Model):
+    """
+    Модель профиля
+
+    pk: int
+    user: User
+    gender: str
+    """
+
     user = models.OneToOneField(User, on_delete=CASCADE)
-    bio = models.TextField(max_length=500, blank=True)
+    gender = models.CharField(
+        max_length=1, choices=[("M", "Мужчина"), ("F", "Женщина")]
+    )
+
+    class Meta:
+        verbose_name = "Профиль"
+        verbose_name_plural = "Профили"
 
     def __str__(self):
-        return f"Profile #{self.pk} by {self.user.username}"
-
-
-class Approval(models.Model): ...
-
-
-class Worker(models.Model): ...
+        return f"Profile #{self.user.username}"

@@ -8,9 +8,11 @@ urlpatterns = [
     path("", lambda request: redirect("warehouse:main"), name="root_redirect"),
     path("admin/", admin.site.urls),
     path("accounts/", include("accounts.urls")),
+    path("account/", include("allauth.urls")),
     path("warehouse/", include("warehouse.urls")),
     path("warehouse/", include("structure.urls")),
     path("warehouse/", include("staff.urls")),
+    path("warehouse/", include("bound.urls")),
 ]
 
 if settings.DEBUG:

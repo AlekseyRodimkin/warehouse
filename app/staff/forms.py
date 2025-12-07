@@ -1,10 +1,11 @@
 from django import forms
 
 GROUP_CHOICES = [
-    ("admin", "Администратор"),
-    ("director", "Директор"),
-    ("master", "Мастер"),
     ("worker", "Рабочий"),
+    ("operator", "Оператор"),
+    ("master", "Мастер"),
+    ("director", "Директор"),
+    ("admin", "Администратор"),
 ]
 
 

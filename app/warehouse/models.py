@@ -1,5 +1,4 @@
 from django.contrib.auth import get_user_model
-from django.contrib.auth.models import User
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 
@@ -168,9 +167,9 @@ class PlaceItem(models.Model):
         unique_together = (
             "place",
             "item",
-        )  # Один товар не может дублироваться в одном месте
-        verbose_name = "Ячейка Деталь"
-        verbose_name_plural = "Ячейки Детали"
+        )
+        verbose_name = "Сток"
+        verbose_name_plural = "Сток"
 
     def __str__(self):
         return f"{self.item.item_code} x{self.quantity} @ {self.place.title}"
@@ -276,8 +275,8 @@ class Stock(models.Model):
         #         models.Index(fields=['title', 'address', 'created_at']),
         #     ]
 
-        def __str__(self):
-            return f"{self.title}"
+    def __str__(self):
+        return f"{self.title}"
 
 
 class History(models.Model):

@@ -1,13 +1,60 @@
+#flash-messages {
+    position: fixed;
+    top: 90%;
+    left: 40%;
+    z-index: 1050;
+}
+
 #themeIcon {
     font-size: 28px;
- }
+}
 
-.inventory-weight-qty-input {
-    max-width: 125px;
- }
+/* Общая таблица с данными */
+.badge{
+    color: black;
+}
 
 .table-container {
-    height: 75vh; overflow-y: auto
+    height: 75vh;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+.table-wrapper {
+    flex: 1;
+    overflow: auto;
+    min-height: 0;
+    scrollbar-width: thin;
+}
+
+.table-wrapper th,
+.table-wrapper td {
+    border-right: 0.5px solid #52595e;
+}
+
+.table-wrapper table {
+    width: max-content !important;
+    min-width: 100%;
+}
+
+.table-wrapper th,
+.table-wrapper td {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.table-wrapper th:first-child,
+.table-wrapper td:first-child {
+    position: sticky;
+    left: 0;
+    z-index: 11;
+}
+
+.table-wrapper thead th:first-child {
+    z-index: 15 !important;
 }
 
 .no-data-table {
@@ -15,10 +62,15 @@
     vertical-align: middle;
 }
 
+.get-docs-button {
+    border: none;
+    background: none;
+}
+
+/*Вкладка структуры*/
 .structure-search-button {
     text-decoration: none;
 }
-
 .structure-search-button:hover {
     text-decoration: underline;
     color: blue;

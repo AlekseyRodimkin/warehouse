@@ -39,10 +39,14 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "widget_tweaks",
-    "accounts.apps.AccountsConfig",
+    "allauth",
+    "allauth.account",
+    "allauth.socialaccount",
+    "accounts.apps.AccountConfig",
     "warehouse.apps.WarehouseConfig",
     "structure.apps.StructureConfig",
     "staff.apps.StaffConfig",
+    "bound.apps.BoundConfig",
 ]
 
 MIDDLEWARE = [
@@ -53,14 +57,37 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "allauth.account.middleware.AccountMiddleware",
 ]
+
+SITE_ID = 1
+
+AUTHENTICATION_BACKENDS = [
+    "django.contrib.auth.backends.ModelBackend",
+    "allauth.account.auth_backends.AuthenticationBackend",
+]
+
+# Требовать подтверждение почты
+ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_EMAIL_VERIFICATION = "mandatory"  # none, optional, mandatory
+ACCOUNT_LOGIN_ON_EMAIL_CONFIRMATION = True
+ACCOUNT_AUTHENTICATION_METHOD = "email"
+ACCOUNT_CONFIRM_EMAIL_ON_GET = True
+
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+EMAIL_HOST = "smtp.yandex.ru"
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = "rod.project@ya.ru"
+EMAIL_HOST_PASSWORD = "lvdknqdewqmcorkj"
+DEFAULT_FROM_EMAIL = "rod.project@ya.ru"
 
 ROOT_URLCONF = "app.urls"
 
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [],
+        "DIRS": [BASE_DIR / "templates"],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -127,5 +154,6 @@ MEDIA_ROOT.mkdir(exist_ok=True)
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 LOGIN_REDIRECT_URL = reverse_lazy("warehouse:main")
-LOGIN_URL = reverse_lazy("accounts:login")
-SESSION_EXPIRE_AT_BROWSER_CLOSE = True  # cессия до закрытия браузера
+LOGIN_URL = "/account/login/"
+SESSION_COOKIE_AGE = 60 * 60 * 8  # 8 часов
+SESSION_EXPIRE_AT_BROWSER_CLOSE = False  # при закрытии браузера

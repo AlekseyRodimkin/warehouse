@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block title %}Подтверждение почты{% endblock %}
+
+{% block body %}
+<div class="d-flex justify-content-center mt-5">
+    <div class="col-12 col-sm-10 col-md-6 col-lg-4 col-xl-3">
+        <div class="card p-4 shadow border-0 bg-body-tertiary text-center">
+            <h3 class="mb-3">Подтвердите Ваш адрес электронной почты</h3>
+            <p>Мы отправили вам письмо с подтверждением.</p>
+            <p>Перейдите по указанной ссылке, чтобы завершить процесс
+                регистрации.</p>
+            <p>Если вы не видите письмо с подтверждением в вашем основном
+                почтовом ящике, проверьте папку
+                "Спам".</p>
+            <p>Обратитесь к администратору, если вы не получите письмо с
+                подтверждением в течение нескольких
+                минут.</p>
+            <a href="{% url 'account_login' %}" class="btn btn-primary mt-3 w-100">Войти</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

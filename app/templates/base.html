@@ -26,15 +26,8 @@
                         <path d="M.5 0a.5.5 0 0 1 .5.5v15a.5.5 0 0 1-1 0V.5A.5.5 0 0 1 .5 0M2 1.5a.5.5 0 0 1 .5-.5h4a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-4a.5.5 0 0 1-.5-.5zm2 4a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-7a.5.5 0 0 1-.5-.5zm2 4a.5.5 0 0 1 .5-.5h6a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-6a.5.5 0 0 1-.5-.5zm2 4a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-7a.5.5 0 0 1-.5-.5z"/>
                     </svg>
                 </a>
-                <h5 class="mb-0 text-primary fw-bold d-none d-md-block">
-                    {% block page_title %}{% endblock %}
-                </h5>
             </div>
 
-            {% if user.is_authenticated %}
-            {% block page_subtitle %}
-            {% endblock %}
-            {% endif %}
 
             <div class="d-flex align-items-center gap-3">
                 {% if user.is_authenticated %}
@@ -58,7 +51,7 @@
 </header>
 
 <div class="container p-0 mt-2">
-    <div id="flash-messages">
+    <div id="flash-messages" style="position: fixed; top: 1rem; right: 1rem; z-index: 1050;">
         {% if messages %}
         {% for message in messages %}
         <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">

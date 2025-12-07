@@ -1,7 +1,7 @@
-{% extends 'warehouse/inventory_header.html' %}
+{% extends 'bound/bound_header.html' %}
 {% load widget_tweaks %}
 
-{% block title %}Партии{% endblock %}
+{% block title %}Приходы{% endblock %}
 
 {% block body %}
 <div class="container-fluid p-0">
@@ -27,50 +27,42 @@
                 </div>
 
                 <div class="col-auto">
-                    {{ form.zone.label_tag }}
-                    {{ form.zone|add_class:"form-control form-control-sm" }}
-                    {% if form.zone.errors %}
-                    <div class="text-danger small">{{ form.zone.errors }}</div>
+                    {{ form.inbound_number.label_tag }}
+                    {{ form.inbound_number|add_class:"form-control form-control-sm" }}
+                    {% if form.inbound_number.errors %}
+                    <div class="text-danger small">{{ form.inbound_number.errors }}</div>
                     {% endif %}
                 </div>
 
                 <div class="col-auto">
-                    {{ form.place.label_tag }}
-                    {{ form.place|add_class:"form-control form-control-sm" }}
-                    {% if form.place.errors %}
-                    <div class="text-danger small">{{ form.place.errors }}</div>
-                    {% endif %}
-                </div>
-
-                <div class="col-auto">
-                    {{ form.item_code.label_tag }}
-                    {{ form.item_code|add_class:"form-control form-control-sm" }}
-                    {% if form.item_code.errors %}
-                    <div class="text-danger small">{{ form.item_code.errors }}</div>
+                    {{ form.supplier.label_tag }}
+                    {{ form.supplier|add_class:"form-control form-control-sm" }}
+                    {% if form.supplier.errors %}
+                    <div class="text-danger small">{{ form.supplier.errors }}</div>
                     {% endif %}
                 </div>
 
                 <div class="col-auto">
                     {{ form.status.label_tag }}
                     {{ form.status|add_class:"form-select form-select-sm" }}
-                    {% if form.status.errors %}
-                    <div class="text-danger small">{{ form.status.errors }}</div>
+                    {% if form.supplier.errors %}
+                    <div class="text-danger small">{{ form.supplier.errors }}</div>
                     {% endif %}
                 </div>
 
                 <div class="col-auto">
-                    {{ form.qty_min.label_tag }}
-                    {{ form.qty_min|add_class:"form-control form-control-sm" }}
-                    {% if form.qty_min.errors %}
-                    <div class="text-danger small">{{ form.qty_min.errors }}</div>
+                    {{ form.planned_date.label_tag }}
+                    {{ form.planned_date|add_class:"form-control form-control-sm" }}
+                    {% if form.planned_date.errors %}
+                    <div class="text-danger small">{{ form.planned_date.errors }}</div>
                     {% endif %}
                 </div>
 
                 <div class="col-auto">
-                    {{ form.qty_max.label_tag }}
-                    {{ form.qty_max|add_class:"form-control form-control-sm" }}
-                    {% if form.qty_max.errors %}
-                    <div class="text-danger small">{{ form.qty_max.errors }}</div>
+                    {{ form.actual_date.label_tag }}
+                    {{ form.actual_date|add_class:"form-control form-control-sm" }}
+                    {% if form.actual_date.errors %}
+                    <div class="text-danger small">{{ form.actual_date.errors }}</div>
                     {% endif %}
                 </div>
 
@@ -86,25 +78,58 @@
             <table class="table table-striped small mb-0">
                 <thead class="table-light sticky-top text-center">
                 <tr>
-                    <th>Адрес</th>
+                    <th>Номер</th>
                     <th>Склад</th>
-                    <th>Зона</th>
-                    <th>Место</th>
-                    <th>Код товара</th>
+                    <th>Поставщик</th>
+                    <th>Планируемая дата</th>
+                    <th>Фактическая дата</th>
                     <th>Статус</th>
-                    <th>Кол-во</th>
+                    <th>Позиций / Кол-во</th>
+                    <th>Создал</th>
+                    <th>Описание</th>
+                    <th>Создан</th>
+                    <th>Обновлен</th>
+                    <th>Документы</th>
                 </tr>
                 </thead>
                 <tbody>
-                {% for pi in place_items %}
+                {% for inb in inbounds %}
                 <tr>
-                    <td class="bg-body-tertiary text-center"><b>{{ pi.full_address }}</b></td>
-                    <td>{{ pi.place.zone.stock.title }}</td>
-                    <td>{{ pi.place.zone.title }}</td>
-                    <td>{{ pi.place.title }}</td>
-                    <td>{{ pi.item.item_code }}</td>
-                    <td>{{ pi.STATUS }}</td>
-                    <td>{{ pi.quantity }}</td>
+                    <td class="bg-body-tertiary"><b>{{ inb.inbound_number }}</b></td>
+                    <td>{{ inb.stock.title }}</td>
+                    <td>{{ inb.supplier|default:"—" }}</td>
+                    <td>{{ inb.planned_date|date:"d.m.Y" }}</td>
+                    <td>
+                        {% if inb.actual_date %}
+                        {{ inb.actual_date|date:"d.m.Y" }}
+                        {% else %}
+                        <span class="text-muted">—</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        <span class="badge
+                            {% if inb.status == 'completed' %}bg-success
+                            {% elif inb.status == 'in_progress' %}bg-warning
+                            {% elif inb.status == 'cancelled' %}bg-danger
+                            {% elif inb.status == 'planned' %}bg-info
+                            {% else %}bg-secondary{% endif %}">
+                            {{ inb.get_status_display }}
+                        </span>
+                    </td>
+                    <td>{{ inb.total_items }} / {{ inb.total_quantity }}</td>
+                    <td>{{ inb.created_by }}</td>
+                    <td>{{ inb.description_short }}</td>
+                    <td>{{ inb.created_at }}</td>
+                    <td>{{ inb.updated_at }}</td>
+                    <td class="text-center">
+                        <a class="get-docs-button" type="button" href="{% url 'bound:download_inbound_docs' inb.id %}">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                 class="bi bi-file-earmark-arrow-down" viewBox="0 0 16 16">
+                                <path d="M8.5 6.5a.5.5 0 0 0-1 0v3.793L6.354 9.146a.5.5 0 1 0-.708.708l2 2a.5.5 0 0 0 .708 0l2-2a.5.5 0 0 0-.708-.708L8.5 10.293z"/>
+                                <path d="M14 14V4.5L9.5 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2M9.5 3A1.5 1.5 0 0 0 11 4.5h2V14a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h5.5z"/>
+                            </svg>
+                        </a>
+                    </td>
                 </tr>
                 {% empty %}
                 <tr>
@@ -175,5 +200,3 @@
     </nav>
 </div>
 {% endblock %}
-
-{% block scripts %}{% endblock %}

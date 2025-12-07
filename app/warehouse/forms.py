@@ -3,7 +3,7 @@ from django import forms
 from .models import Item, Place, PlaceItem, Stock, Zone
 
 # Статусы продублированы от Models.PlaceItem.STATUS_CHOICES
-STATUS_CHOICES = [
+PLACE_ITEM_STATUS_CHOICES = [
     ("ok", "ok"),
     ("blk", "blk"),
     ("no", "no"),
@@ -38,7 +38,11 @@ class PlaceItemSearchForm(forms.Form):
             attrs={"placeholder": "Код товара", "class": "form-control"}
         ),
     )
-    status = forms.ChoiceField(choices=[("", "---")] + STATUS_CHOICES, required=False)
+    status = forms.ChoiceField(
+        choices=[("", "---")] + PLACE_ITEM_STATUS_CHOICES,
+        required=False,
+        label="Статус",
+    )
     qty_min = forms.IntegerField(
         required=False,
         min_value=1,
@@ -83,7 +87,9 @@ class ItemSearchForm(forms.Form):
             attrs={"placeholder": "Код товара", "class": "form-control"}
         ),
     )
-    status = forms.ChoiceField(choices=[("", "---")] + STATUS_CHOICES, required=False)
+    status = forms.ChoiceField(
+        choices=[("", "---")] + PLACE_ITEM_STATUS_CHOICES, required=False
+    )
     weight_min = forms.IntegerField(
         required=False,
         min_value=1,

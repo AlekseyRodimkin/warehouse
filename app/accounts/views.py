@@ -1,34 +1,17 @@
-from django.contrib.auth import authenticate, login, logout
-from django.contrib.auth.forms import UserCreationForm
-from django.contrib.auth.views import LogoutView
-from django.http import HttpRequest, HttpResponse
-from django.shortcuts import render
-from django.urls import reverse_lazy
-from django.views.generic import CreateView, TemplateView
-
-from .models import Profile
-
-
-class AppLogoutView(LogoutView):
-    next_page = reverse_lazy("warehouse:main")
-
-
-class RegisterView(CreateView):
-    form_class = UserCreationForm
-    template_name = "accounts/register.html"
-    success_url = reverse_lazy("warehouse:main")
-
-    def form_valid(self, form):
-        response = super().form_valid(form)
-        Profile.objects.create(user=self.object)
-        username = form.cleaned_data.get("username")
-        password = form.cleaned_data.get("password1")
-        user = authenticate(self.request, username=username, password=password)
-        login(request=self.request, user=user)
-        return response
+from django.views.generic import TemplateView
 
 
 class MeView(TemplateView):
+    """
+    Представление страницы пользователя.
+
+    Основная логика:
+    - Рендерит страницу профиля с учетом группы admin, для отображения кнопки на админ. панель
+
+    Шаблон:
+        accounts/me.html
+    """
+
     template_name = "accounts/me.html"
 
     def get_context_data(self, **kwargs):

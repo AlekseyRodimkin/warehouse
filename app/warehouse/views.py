@@ -2,14 +2,13 @@ from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db import transaction
 from django.db.models import Q
-from django.http import HttpRequest, HttpResponse
-from django.shortcuts import get_object_or_404, redirect, render
+from django.shortcuts import redirect, render
 from django.views import View
 from django.views.generic import ListView, TemplateView
 
 from .forms import (HistorySearchForm, ItemSearchForm, MoveItemForm,
                     PlaceItemSearchForm)
-from .models import History, Item, PlaceItem
+from .models import History, PlaceItem
 
 
 class MainView(TemplateView):
@@ -24,7 +23,7 @@ class MainView(TemplateView):
         context = super().get_context_data(**kwargs)
         user = self.request.user
         context["user_is_admin"] = user.is_superuser
-        context["user_is_director"] = user.groups.filter(name="директор").exists()
+        context["user_is_director"] = user.groups.filter(name="director").exists()
         return context
 
 
@@ -183,7 +182,7 @@ class InventoryHistoryView(LoginRequiredMixin, ListView):
     """
 
     model = History
-    template_name = "warehouse/inventory-history.html"
+    template_name = "warehouse/history-inventory-search.html"
     context_object_name = "histories"
     paginate_by = 100
 
@@ -262,7 +261,7 @@ class InventoryMoveView(LoginRequiredMixin, View):
         Перенаправление на страницу перемещения
     """
 
-    template_name = "warehouse/inventory-move.html"
+    template_name = "warehouse/move-inventory.html"
 
     def get(self, request):
         form = MoveItemForm()

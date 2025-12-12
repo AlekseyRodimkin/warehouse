@@ -1,13 +1,14 @@
 {% extends 'bound/bound_header.html' %}
 {% load widget_tweaks %}
 
-{% block title %}Приходы{% endblock %}
+{% block title %}Поставки{% endblock %}
 
 {% block body %}
 <div class="container-fluid p-0">
     <div class="mb-2 p-1 rounded small bg-body-tertiary">
         <form method="get" class="mb-1">
-            {# Ошибки летят из forms.py/PlaceItemSearchForm.clean() #}
+
+            {# Ошибки летят из forms.py/InboundSearchForm.clean() #}
             {% if form.non_field_errors %}
             <div class="alert alert-danger">
                 {% for error in form.non_field_errors %}
@@ -69,6 +70,13 @@
                 <div class="col-auto mx-2">
                     <button type="submit" class="btn btn-primary btn-sm">Поиск</button>
                 </div>
+
+                <div class="col-auto ms-auto">
+                    <a href="/warehouse/search/inbound/?stock=&inbound_number=&supplier=&status=&planned_date=&actual_date=">
+                        Сбросить
+                    </a>
+                </div>
+
             </div>
         </form>
     </div>

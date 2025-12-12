@@ -135,14 +135,13 @@ class PlaceItem(models.Model):
     quantity = models.PositiveIntegerField(default=1)
     full_address = models.CharField(max_length=500, blank=True, db_index=True)
     STATUSES_CHOICES = [
-        ("ok", "ok"),
-        ("blk", "blk"),
-        ("no", "no"),
+        ("inbound", "inbound"),
+        ("blk", "block"),
         ("new", "new"),
-        ("dock", "dock"),
+        ("ok", "ok"),
     ]
 
-    STATUS = models.CharField(
+    status = models.CharField(
         max_length=20,
         choices=STATUSES_CHOICES,
         default="new",

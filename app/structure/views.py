@@ -14,6 +14,7 @@ class StructureManagerView(LoginRequiredMixin, PermissionRequiredMixin, FormView
     Представление для создания-удаления склада / зоны / места.
     Требует разрешения:
     - Создание / изменение /
+    Добавляет в контекст принадлежность пользователя конкретным группам для отображения кнопок
 
     Основная логика:
     - Добавляет форму StructureActionForm в контекст шаблона и валидирует ей входные параметры
@@ -153,10 +154,18 @@ class StructureManagerView(LoginRequiredMixin, PermissionRequiredMixin, FormView
             messages.success(self.request, msg)
             return redirect("structure:structure-manager")
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        user = self.request.user
+        context["user_is_admin"] = user.is_superuser
+        context["user_is_director"] = user.groups.filter(name="director").exists()
+        return context
+
 
 class StructureSearchView(LoginRequiredMixin, ListView):
     """
     Представление для поиска структуры склада
+    Добавляет в контекст принадлежность пользователя конкретным группам для отображения кнопок
 
     Основная логика:
     - Добавляет форму StructureSearchForm в контекст шаблона и валидирует ей входные параметры
@@ -203,5 +212,8 @@ class StructureSearchView(LoginRequiredMixin, ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        user = self.request.user
+        context["user_is_admin"] = user.is_superuser
+        context["user_is_director"] = user.groups.filter(name="director").exists()
         context["form"] = StructureSearchForm(self.request.GET)
         return context

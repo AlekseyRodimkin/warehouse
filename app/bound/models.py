@@ -20,7 +20,6 @@ class Inbound(models.Model):
     """
 
     STATUS_CHOICES = [
-        ("draft", "Черновик"),
         ("planned", "Запланирован"),
         ("in_progress", "В процессе"),
         ("completed", "Завершен"),
@@ -31,7 +30,9 @@ class Inbound(models.Model):
         Stock, on_delete=models.PROTECT, related_name="inbounds", verbose_name="Склад"
     )
 
-    created_by = models.CharField(max_length=100, verbose_name="Создал")
+    created_by = models.CharField(
+        max_length=100, verbose_name="Создал", default="admin"
+    )
 
     inbound_number = models.CharField(
         max_length=50, unique=True, verbose_name="Номер поставки", null=True, blank=True
@@ -127,7 +128,7 @@ class InboundItem(models.Model):
         Inbound,
         on_delete=models.CASCADE,
         related_name="inbound_items",
-        verbose_name="Приход",
+        verbose_name="Поставка",
     )
 
     item = models.ForeignKey(Item, on_delete=models.PROTECT, verbose_name="Товар")

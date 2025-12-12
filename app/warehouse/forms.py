@@ -4,11 +4,10 @@ from .models import Item, Place, PlaceItem, Stock, Zone
 
 # Статусы продублированы от Models.PlaceItem.STATUS_CHOICES
 PLACE_ITEM_STATUS_CHOICES = [
-    ("ok", "ok"),
-    ("blk", "blk"),
-    ("no", "no"),
+    ("inbound", "inbound"),
+    ("blk", "block"),
     ("new", "new"),
-    ("dock", "dock"),
+    ("ok", "ok"),
 ]
 
 

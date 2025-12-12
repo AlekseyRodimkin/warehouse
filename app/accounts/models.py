@@ -23,3 +23,14 @@ class Profile(models.Model):
 
     def __str__(self):
         return f"Profile #{self.user.username}"
+
+
+class Event(models.Model):
+    """
+    Модель события
+    """
+
+    profile = models.ForeignKey(Profile, on_delete=CASCADE)
+    title = models.CharField()
+    body = models.TextField()
+    status = models.CharField()

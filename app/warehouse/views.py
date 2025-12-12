@@ -79,7 +79,7 @@ class InventoryLotSearchView(LoginRequiredMixin, ListView):
             if data.get("item_code"):
                 qs = qs.filter(item__item_code__icontains=data["item_code"])
             if data.get("status"):
-                qs = qs.filter(STATUS=data["status"])
+                qs = qs.filter(status=data["status"])
             if data.get("qty_min") is not None:
                 qs = qs.filter(quantity__gte=data["qty_min"])
             if data.get("qty_max") is not None:
@@ -144,7 +144,7 @@ class InventoryItemSearchView(LoginRequiredMixin, ListView):
             if data.get("item_code"):
                 qs = qs.filter(item__item_code__icontains=data["item_code"])
             if data.get("status"):
-                qs = qs.filter(STATUS=data["status"])
+                qs = qs.filter(status=data["status"])
             if data.get("weight_min") is not None:
                 qs = qs.filter(item__weight__gte=data["weight_min"])
             if data.get("weight_max") is not None:
@@ -285,11 +285,11 @@ class InventoryMoveView(LoginRequiredMixin, View):
                 to_pi, created = PlaceItem.objects.get_or_create(
                     place=to_place,
                     item=item,
-                    defaults={"quantity": quantity, "STATUS": "ok"},
+                    defaults={"quantity": quantity, "status": "ok"},
                 )
                 if not created:
                     to_pi.quantity += quantity
-                    to_pi.STATUS = "ok"
+                    to_pi.status = "ok"
                 to_pi.save()
 
                 History.objects.create(

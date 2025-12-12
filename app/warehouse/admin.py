@@ -106,7 +106,6 @@ class PlaceAdmin(admin.ModelAdmin):
     list_display_links = (
         "pk",
         "full_address",
-        "description_short",
     )
     ordering = (
         "pk",
@@ -125,7 +124,7 @@ class PlaceAdmin(admin.ModelAdmin):
 
 @admin.register(PlaceItem)
 class PlaceItemAdmin(admin.ModelAdmin):
-    list_display = ("full_address", "item", "quantity", "STATUS")
+    list_display = ("full_address", "item", "quantity", "status")
     list_display_links = (
         "full_address",
         "item",
@@ -140,7 +139,7 @@ class PlaceItemAdmin(admin.ModelAdmin):
         "quantity",
     )
     search_help_text = "full_address, quantity"
-    list_editable = ("STATUS",)
+    list_editable = ("status",)
     list_per_page = 50
     readonly_fields = ("full_address",)
 

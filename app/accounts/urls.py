@@ -1,4 +1,3 @@
-from django.contrib.auth.views import LoginView
 from django.urls import path
 
 from .views import MeView
@@ -6,15 +5,5 @@ from .views import MeView
 app_name = "accounts"
 
 urlpatterns = [
-    # path(
-    #     "login/",
-    #     LoginView.as_view(
-    #         template_name="accounts/login.html",
-    #         redirect_authenticated_user=True,
-    #     ),
-    #     name="login",
-    # ),
-    # path("logout/", AppLogoutView.as_view(), name="logout"),
-    # path("register/", RegisterView.as_view(), name="register"),
     path("me/", MeView.as_view(), name="me"),
 ]

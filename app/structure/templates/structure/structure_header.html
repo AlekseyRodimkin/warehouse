@@ -5,14 +5,19 @@
 {% block page_subtitle %}
 <div class="flex-grow-1 d-flex justify-content-center">
     <ul class="nav nav-pills gap-2 flex-wrap small">
+
         <li class="nav-item">
             <a class="nav-link py-1 px-3 {% if request.resolver_match.url_name == 'structure-search' %}active{% endif %}"
                href="{% url 'structure:structure-search' %}">Просмотр структуры</a>
         </li>
+
+        {% if user_is_admin or user_is_director or user_is_master %}
         <li class="nav-item">
             <a class="nav-link py-1 px-3 {% if request.resolver_match.url_name == 'structure-manager' %}active{% endif %}"
                href="{% url 'structure:structure-manager' %}">Создание / удаление</a>
         </li>
+        {% endif %}
+
     </ul>
 </div>
 {% endblock %}

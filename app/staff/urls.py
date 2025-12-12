@@ -5,5 +5,5 @@ from .views import StaffSearchView
 app_name = "staff"
 
 urlpatterns = [
-    path("search/staff/", StaffSearchView.as_view(), name="search-staff"),
+    path("search/staff/", StaffSearchView.as_view(), name="staff-search"),
 ]

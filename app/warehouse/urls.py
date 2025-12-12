@@ -11,17 +11,17 @@ urlpatterns = [
     path(
         "inventory/search/lot/",
         InventoryLotSearchView.as_view(),
-        name="lot-inventory-search",
+        name="lot-search",
     ),
     path(
         "inventory/search/item/",
         InventoryItemSearchView.as_view(),
-        name="item-inventory-search",
+        name="item-search",
     ),
     path("inventory/move/", InventoryMoveView.as_view(), name="inventory-move"),
     path(
         "inventory/search/history/",
         InventoryHistoryView.as_view(),
-        name="inventory-history",
+        name="history-search",
     ),
 ]

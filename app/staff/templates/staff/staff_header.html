@@ -6,8 +6,8 @@
 <div class="flex-grow-1 d-flex justify-content-center">
     <ul class="nav nav-pills gap-2 flex-wrap small">
         <li class="nav-item">
-            <a class="nav-link py-1 px-3 {% if request.resolver_match.url_name == 'search-staff' %}active{% endif %}"
-               href="{% url 'staff:search-staff' %}">Поиск работников</a>
+            <a class="nav-link py-1 px-3 {% if request.resolver_match.url_name == 'staff-search' %}active{% endif %}"
+               href="{% url 'staff:staff-search' %}">Поиск работников</a>
         </li>
     </ul>
 </div>

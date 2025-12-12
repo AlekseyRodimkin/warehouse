@@ -1,6 +1,7 @@
+import logging.config
 import os
 from pathlib import Path
-import logging.config
+
 from django.urls import reverse_lazy
 from dotenv import load_dotenv
 
@@ -11,9 +12,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.getenv("DJANGO_SECRET_KEY")
 
 ALLOWED_HOSTS = [
-                    "0.0.0.0",
-                    "127.0.0.1",
-                ] + os.getenv(
+    "0.0.0.0",
+    "127.0.0.1",
+] + os.getenv(
     "DJANGO_ALLOWED_HOSTS", ""
 ).split(",")
 
@@ -87,7 +88,7 @@ ACCOUNT_CONFIRM_EMAIL_ON_GET = True
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 EMAIL_HOST = os.getenv("EMAIL_HOST", "smtp.gmail.com")
 EMAIL_PORT = os.getenv("EMAIL_PORT", 587)
-EMAIL_USE_TLS = os.getenv("EMAIL_USE_TLS", '0') == "1"
+EMAIL_USE_TLS = os.getenv("EMAIL_USE_TLS", "0") == "1"
 EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER")
 EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD")
 DEFAULT_FROM_EMAIL = os.getenv("EMAIL_HOST_USER")
@@ -163,8 +164,25 @@ STATICFILES_DIRS = [
 ]
 
 # допустимые типы загружаемых файлов
-ALLOWED_MIME_TYPES = []
-
+MAX_FILE_SIZE = 10 * 1024 * 1024  # 10MB
+ALLOWED_EXTS_DOCS = (
+    ".pdf",
+    ".doc",
+    ".docx",
+    ".xls",
+    ".xlsx",
+    ".xlsb",
+    ".jpg",
+    ".jpeg",
+    ".png",
+    ".tiff",
+    ".bmp",
+    ".ods",
+    ".csv",
+    ".zip",
+    ".rar",
+    ".txt",
+)
 MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / "uploads"
 MEDIA_ROOT.mkdir(exist_ok=True)
@@ -193,7 +211,9 @@ LOGGING = {
     "version": 1,
     "disable_existing_loggers": False,
     "formatters": {
-        "verbose": {"format": "%(asctime)s [%(levelname)s] %(name)s: %(message)s"}
+        "verbose": {
+            "format": "%(asctime)s [%(levelname)s] %(name)s:%(lineno)d %(message)s"
+        }
     },
     "handlers": {
         "console": {

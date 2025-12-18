@@ -1,5 +1,5 @@
-import logging.config
 import os
+import sys
 from pathlib import Path
 
 from django.urls import reverse_lazy
@@ -10,8 +10,10 @@ load_dotenv()
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = os.getenv("DJANGO_SECRET_KEY")
+COMPANY_NAME = os.getenv("COMPANY_NAME")
 
 ALLOWED_HOSTS = [
+    "localhost",
     "0.0.0.0",
     "127.0.0.1",
 ] + os.getenv(
@@ -48,7 +50,6 @@ INSTALLED_APPS = [
     "structure.apps.StructureConfig",
     "staff.apps.StaffConfig",
     "wave.apps.WaveConfig",
-    "terminal.apps.TerminalConfig",
 ]
 
 MIDDLEWARE = [

@@ -1,0 +1,1 @@
+from .packing_list import generate_packing_list_pdf

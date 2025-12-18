@@ -1,19 +1,72 @@
 services:
+  app:
+    build:
+      dockerfile: ./Dockerfile
+    container_name: warehouse_app
+    env_file: .env
+    depends_on:
+      - postgres
+    command: >
+      sh -c "python manage.py migrate && python manage.py createsu &&
+             python manage.py loaddata warehouse/fixtures/initial_data.json &&
+             python manage.py collectstatic --noinput &&
+             gunicorn app.wsgi:application --bind 0.0.0.0:8000"
+#    ports:
+#      - "8000:8000"
+    expose:
+      - "8000"
+    volumes:
+      - ./app/logs:/app/logs
+      - ./app/static:/app/static
+    restart: unless-stopped
+    networks:
+      - nginx-proxy
+
   postgres:
     image: postgres:15
-    container_name: postgres_db
+    container_name: warehouse_postgres_db
     restart: unless-stopped
     env_file: .env
-    environment:
-      - POSTGRES_DB=${POSTGRES_DB}
-      - POSTGRES_USER=${POSTGRES_USER}
-      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
     ports:
       - "5432:5432"
     volumes:
       - pg_data:/var/lib/postgresql/data
 
+  nginx-proxy:
+    image: jwilder/nginx-proxy
+    container_name: nginx-proxy
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./vhost.d:/etc/nginx/vhost.d:ro
+      - /usr/share/nginx/html:/usr/share/nginx/html
+      - /var/run/docker.sock:/tmp/docker.sock:ro
+      - certs:/etc/nginx/certs:ro
+      - ./app/static:/app/static:ro
+    restart: unless-stopped
+    networks:
+      - nginx-proxy
+
+  letsencrypt:
+    image: jrcs/letsencrypt-nginx-proxy-companion
+    container_name: nginx-letsencrypt
+    environment:
+      - NGINX_PROXY_CONTAINER=nginx-proxy
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - certs:/etc/nginx/certs
+      - /usr/share/nginx/html:/usr/share/nginx/html
+      - acme:/etc/acme.sh
+    restart: unless-stopped
+    networks:
+      - nginx-proxy
 
 volumes:
   pg_data:
-  pg_logs:
+  certs:
+  acme:
+
+networks:
+  nginx-proxy:
+    external: true

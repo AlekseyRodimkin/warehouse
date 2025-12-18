@@ -1,15 +1,15 @@
 import logging
-from wave.models import InboundItem, OutboundItem
-
-from django.db import transaction
 from django.db.models import Sum
+
+from wave.models import InboundItem, OutboundItem
 from warehouse.models import Item, Place, PlaceItem
+from wave.models import OutboundStatusService
 
 logger = logging.getLogger(__name__)
 
 
 def create_items_by_inb_form(
-    df, wave_status, inbound_place, new_place
+        df, wave_status, inbound_place, new_place
 ) -> list[tuple[Item, int]]:
     """
     валидация полей формы
@@ -84,10 +84,10 @@ def create_items_by_out_form(df, wave_status, outbound_place) -> list[tuple[Item
 
         # общий остаток по складу кроме адреса OUTBOUND со статусом ok
         available_qty = (
-            PlaceItem.objects.filter(item=item, status="ok")
-            .exclude(place=outbound_place)
-            .aggregate(total=Sum("quantity"))["total"]
-            or 0
+                PlaceItem.objects.filter(item=item, status="ok")
+                .exclude(place=outbound_place)
+                .aggregate(total=Sum("quantity"))["total"]
+                or 0
         )
 
         if available_qty < quantity:
@@ -104,9 +104,9 @@ def create_items_by_out_form(df, wave_status, outbound_place) -> list[tuple[Item
 
             # списываем с реальных мест
             for pi in (
-                PlaceItem.objects.filter(item=item, status="ok")
-                .exclude(place=outbound_place)
-                .order_by("pk")
+                    PlaceItem.objects.filter(item=item, status="ok")
+                            .exclude(place=outbound_place)
+                            .order_by("pk")
             ):
                 if to_move <= 0:
                     break
@@ -134,9 +134,9 @@ def create_items_by_out_form(df, wave_status, outbound_place) -> list[tuple[Item
             to_move = quantity
             # списываем с реальных мест
             for pi in (
-                PlaceItem.objects.filter(item=item, status="ok")
-                .exclude(place=outbound_place)
-                .order_by("pk")
+                    PlaceItem.objects.filter(item=item, status="ok")
+                            .exclude(place=outbound_place)
+                            .order_by("pk")
             ):
                 if to_move <= 0:
                     break
@@ -198,3 +198,6 @@ def create_items(*, df, wave, status: str, wave_type: str):
                 outbound=wave,
                 defaults={"total_quantity": quantity},
             )
+        if wave.status == "completed":
+            OutboundStatusService._generate_packing_list(outbound=wave)
+

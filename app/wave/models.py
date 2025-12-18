@@ -6,7 +6,9 @@ from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
 from django.db import models, transaction
 from django.utils import timezone
+
 from warehouse.models import Item, Place, PlaceItem, Stock
+from wave.pdf_generator import generate_packing_list_pdf
 
 User = get_user_model()
 logger = logging.getLogger(__name__)
@@ -379,6 +381,16 @@ class InboundStatusService:
 class OutboundStatusService:
 
     @staticmethod
+    def _generate_packing_list(outbound: Outbound):
+        logger.debug("OutboundStatusService._generate_packing_list(out_pk:%s)", outbound.pk)
+        try:
+            pdf_path = generate_packing_list_pdf(outbound)
+            logger.debug(f"Packing list created: {pdf_path}")
+        except Exception as e:
+            logger.error(f"Error generating packing dock: {e}")
+            raise
+
+    @staticmethod
     def _validate_transition(old_status, new_status):
         """Метод валидации перехода"""
         allowed = ALLOWED_TRANSITIONS.get(old_status, set())
@@ -493,6 +505,7 @@ class OutboundStatusService:
             # удаляем места с адресом outbound и деталями из отгрузки
             elif old_status == "in_progress" and new_status == "completed":
                 cls._in_progress_to_completed(outbound)
+                cls._generate_packing_list(outbound)
 
 
             # in_progress -> cancelled

@@ -1,5 +1,4 @@
 import os
-import sys
 from pathlib import Path
 
 from django.urls import reverse_lazy
@@ -11,6 +10,13 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = os.getenv("DJANGO_SECRET_KEY")
 COMPANY_NAME = os.getenv("COMPANY_NAME")
+DOMAIN = os.getenv("LETSENCRYPT_HOST")
+
+CSRF_TRUSTED_ORIGINS = [
+    "http://localhost",
+    "http://127.0.0.1",
+    f"https://{DOMAIN}",
+]
 
 ALLOWED_HOSTS = [
     "localhost",

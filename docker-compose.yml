@@ -47,6 +47,8 @@ services:
       - certs:/etc/nginx/certs:ro
       - ./app/static:/app/static:ro
     restart: unless-stopped
+    depends_on:
+      - app
     networks:
       - nginx-proxy
 
@@ -61,6 +63,8 @@ services:
       - /usr/share/nginx/html:/usr/share/nginx/html
       - acme:/etc/acme.sh
     restart: unless-stopped
+    depends_on:
+      - app
     networks:
       - nginx-proxy
 

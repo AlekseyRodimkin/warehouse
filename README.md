@@ -8,8 +8,9 @@
 - letsencrypt
 
 ### Скриншоты
+#### Главный экран
+<img src="https://github.com/AlekseyRodimkin/warehouse/blob/main/README-IMAGES/main.png" style="width:50%;">
 
-...
 
 ### Схемы
 
@@ -79,7 +80,7 @@ chmod +x ./setup_backup.sh
 
 ```bash
 gpg --full-generate-key
-- ```
+```
 
 (1) RSA and RSA (default)\
 4096\

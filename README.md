@@ -67,10 +67,10 @@
 ### Схемы
 
 #### Схема базы данных
-<src="https://github.com/AlekseyRodimkin/warehouse/blob/main/schemes/db/db_4.0.png" style="width:70%;">
+<img src="https://github.com/AlekseyRodimkin/warehouse/blob/main/schemes/db/db_4.0.png" style="width:70%;">
 
 #### Схема доступов
-<src="https://github.com/AlekseyRodimkin/warehouse/blob/main/schemes/permissions/permissions_4.0.png" style="width:70%;">
+<img src="https://github.com/AlekseyRodimkin/warehouse/blob/main/schemes/permissions/permissions_4.0.png" style="width:70%;">
 
 ### Установка и разворачивание проекта
 

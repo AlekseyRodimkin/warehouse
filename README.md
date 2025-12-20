@@ -38,7 +38,7 @@
 <img src="https://github.com/AlekseyRodimkin/warehouse/blob/main/README-IMAGES/outbound-search-2.png" style="width:90%;">
 <img src="https://github.com/AlekseyRodimkin/warehouse/blob/main/README-IMAGES/outbound-more.png" style="width:90%;">
 <img src="https://github.com/AlekseyRodimkin/warehouse/blob/main/README-IMAGES/outbound-zip.png" style="width:50%;">
-<img src="https://github.com/AlekseyRodimkin/warehouse/blob/main/README-IMAGES/pack-list.png" style="width:90%;">
+<img src="https://github.com/AlekseyRodimkin/warehouse/blob/main/README-IMAGES/pack-list.png" style="width:70%;">
 
 #### Поиск товара
 <img src="https://github.com/AlekseyRodimkin/warehouse/blob/main/README-IMAGES/item-search.png" style="width:90%;">
@@ -66,7 +66,11 @@
 
 ### Схемы
 
-...
+#### Схема базы данных
+<src="https://github.com/AlekseyRodimkin/warehouse/blob/main/schemes/db/db_4.0.png" style="width:70%;">
+
+#### Схема доступов
+<src="https://github.com/AlekseyRodimkin/warehouse/blob/main/schemes/permissions/permissions_4.0.png" style="width:70%;">
 
 ### Установка и разворачивание проекта
 

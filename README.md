@@ -160,3 +160,218 @@ gpg --import public-key.gpg
 ```bash
 gpg -d <backup.gpg> > backup.sql
 ```
+
+### Полная структура проекта
+warehouse\
+|____schemes\
+| |____logic\
+| | |____outbound_way.png\
+| | |____inbound_way.excalidraw\
+| | |____outbound_way.excalidraw\
+| | |____inbound_way.png\
+| |____permissions\
+| | |____permissions_4.0.excalidraw\
+| | |____permissions_4.0.png\
+| |____db\
+| | |____db_4.0.png\
+| | |____db_backup.excalidraw\
+| | |____db_backup.png\
+| | |____db_4.0.excalidraw\
+|____app\
+| |____app\
+| | |____asgi.py\
+| | |______init__.py\
+| | |____settings.py\
+| | |____urls.py\
+| | |____wsgi.py\
+| |______init__.py\
+| |____uploads\
+| | |____inbounds\
+| | |____outbounds\
+| |____logs\
+| | |____app.log\
+| |____accounts\
+| | |____signals.py\
+| | |____migrations\
+| | | |______init__.py\
+| | | |____0001_initial.py\
+| | |____models.py\
+| | |____management\
+| | | |______init__.py\
+| | | |____commands\
+| | | | |____createsu.py\
+| | | | |______init__.py\
+| | |______init__.py\
+| | |____apps.py\
+| | |____admin.py\
+| | |____templates\
+| | | |____accounts\
+| | | | |____me.html\
+| | |____tests.py\
+| | |____urls.py\
+| | |____views.py\
+| |____static\
+| |____templates\
+| | |____base.html\
+| | |____account\
+| | | |____password_reset_from_key.html\
+| | | |____password_reset_done.html\
+| | | |____password_reset_from_key_done.html\
+| | | |____email_confirm.html\
+| | | |____password_reset.html\
+| | | |____login.html\
+| | | |____verification_sent.html\
+| | | |____password_change.html\
+| | | |____signup.html\
+| |____manage.py\
+| |____staff\
+| | |____migrations\
+| | | |______init__.py\
+| | |____models.py\
+| | |______init__.py\
+| | |____apps.py\
+| | |____forms.py\
+| | |____admin.py\
+| | |____templates\
+| | | |____staff\
+| | | | |____staff_header.html\
+| | | | |____staff-search.html\
+| | |____tests.py\
+| | |____urls.py\
+| | |____views.py\
+| |____wave\
+| | |____signals.py\
+| | |____migrations\
+| | | |______init__.py\
+| | | |____0001_initial.py\
+| | |____pdf_generator\
+| | | |______init__.py\
+| | | |____OpenSans-Bold.ttf\
+| | | |____styles.py\
+| | | |____tables.py\
+| | | |____packing_list.py\
+| | | |____OpenSans-Regular.ttf\
+| | | |____fonts.py\
+| | |____models.py\
+| | |______init__.py\
+| | |____apps.py\
+| | |____forms.py\
+| | |____admin.py\
+| | |____templates\
+| | | |____wave\
+| | | | |____inbound_header.html\
+| | | | |____create-outbound.html\
+| | | | |____create-inbound.html\
+| | | | |____outbound_header.html\
+| | | | |____outbound-search.html\
+| | | | |____inbound-search.html\
+| | |____tests.py\
+| | |____urls.py\
+| | |____services\
+| | | |______init__.py\
+| | | |____wave\
+| | | | |______init__.py\
+| | | | |____wave_files.py\
+| | | | |____wave_items.py\
+| | | | |____wave_factory.py\
+| | |____views.py\
+| |____static_debug\
+| | |____favicon.ico\
+| | |____forms\
+| | | |____INB-FORM.xlsx\
+| | | |____OUT-FORM.xlsx\
+| | |____css\
+| | | |____style.css\
+| | |____js\
+| | | |____notification.js\
+| | | |____scheme_button.js\
+| | | |____wave_files.js\
+| | | |____set_outbound_status.js\
+| | | |____outbound_items_modal.js\
+| | | |____out_form_validation.js\
+| | | |____set_inbound_status.js\
+| | | |____inbound_items_modal.js\
+| | | |____inb_form_validation.js\
+| | |____assets\
+| | | |____man.png\
+| | | |____woman.png\
+| |____warehouse\
+| | |____signals.py\
+| | |____migrations\
+| | | |______init__.py\
+| | | |____0001_initial.py\
+| | |____models.py\
+| | |______init__.py\
+| | |____apps.py\
+| | |____forms.py\
+| | |____admin.py\
+| | |____utils.py\
+| | |____templates\
+| | | |____warehouse\
+| | | | |____item-inventory-search.html\
+| | | | |____base.html\
+| | | | |____history-inventory-search.html\
+| | | | |____lot-inventory-search.html\
+| | | | |____move-inventory.html\
+| | | | |____main.html\
+| | | | |____inventory_header.html\
+| | |____fixtures\
+| | | |____initial_data.json\
+| | |____tests.py\
+| | |____urls.py\
+| | |____views.py\
+| |____structure\
+| | |____migrations\
+| | | |______init__.py\
+| | |____models.py\
+| | |______init__.py\
+| | |____apps.py\
+| | |____forms.py\
+| | |____admin.py\
+| | |____templates\
+| | | |____structure\
+| | | | |____structure-manager.html\
+| | | | |____structure-search.html\
+| | | | |____structure_header.html\
+| | |____tests.py\
+| | |____urls.py\
+| | |____views.py\
+|____Dockerfile\
+|____Makefile\
+|____pyproject.toml\
+|____setup_backup.sh\
+|____README.md\
+|____.env.template\
+|____.dockerignore\
+|____.gitignore\
+|____.env\
+|____README-IMAGES\
+| |____outbound-more.png\
+| |____inbound-more.png\
+| |____login.png\
+| |____.DS_Store\
+| |____item-search.png\
+| |____outbound-search-1.png\
+| |____structure-manager.png\
+| |____main.png\
+| |____outbound-search-2.png\
+| |____inbound-status.png\
+| |____zip.png\
+| |____register.png\
+| |____outbound-create.png\
+| |____item-move.png\
+| |____main-2.png\
+| |____structure-search.png\
+| |____history.png\
+| |____pack-list.png\
+| |____lot-searh.png\
+| |____profile.png\
+| |____outbound-zip.png\
+| |____inbound-create.png\
+| |____inbound-search-2.png\
+| |____admin-dash.png\
+| |____inbound-search-1.png\
+| |____staff-search.png\
+|____docker-compose.yml\
+|____vhost.d\
+| |____im_your_domain\

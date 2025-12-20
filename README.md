@@ -8,9 +8,30 @@
 - letsencrypt
 
 ### Скриншоты
-#### Главный экран
+#### Главная гость
 <img src="https://github.com/AlekseyRodimkin/warehouse/blob/main/README-IMAGES/main.png" style="width:70%;">
 
+#### Главная
+<img src="https://github.com/AlekseyRodimkin/warehouse/blob/main/README-IMAGES/main-2.png" style="width:70%;">
+
+#### Просмотр структуры
+<img src="https://github.com/AlekseyRodimkin/warehouse/blob/main/README-IMAGES/structure-search.png" style="width:70%;">
+
+#### Изменение структуры
+<img src="https://github.com/AlekseyRodimkin/warehouse/blob/main/README-IMAGES/structure-manager.png" style="width:70%;">
+
+#### Создание поставки
+<img src="https://github.com/AlekseyRodimkin/warehouse/blob/main/README-IMAGES/inbound-create.png" style="width:70%;">
+
+#### Просмотр поставок
+<img src="https://github.com/AlekseyRodimkin/warehouse/blob/main/README-IMAGES/inbound-search-1.png" style="width:70%;">
+<img src="https://github.com/AlekseyRodimkin/warehouse/blob/main/README-IMAGES/inbound-search-2.png" style="width:70%;">
+<img src="https://github.com/AlekseyRodimkin/warehouse/blob/main/README-IMAGES/inbound-status.png" style="width:70%;">
+<img src="https://github.com/AlekseyRodimkin/warehouse/blob/main/README-IMAGES/inbound-more.png" style="width:70%;">
+<img src="https://github.com/AlekseyRodimkin/warehouse/blob/main/README-IMAGES/zip.png" style="width:70%;">
+
+#### 
+<img src="" style="width:70%;">
 
 ### Схемы
 

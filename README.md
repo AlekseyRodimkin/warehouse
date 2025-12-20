@@ -129,4 +129,4 @@ gpg --import public-key.gpg
 - Расшифровать дамп возможно командой
 ```bash
 gpg -d <backup.gpg> > backup.sql
-- ```
+```

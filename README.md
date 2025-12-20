@@ -55,7 +55,7 @@
 <img src="https://github.com/AlekseyRodimkin/warehouse/blob/main/README-IMAGES/staff-search.png" style="width:90%;">
 
 #### Административная панель
-<img src="https://github.com/AlekseyRodimkin/warehouse/blob/main/README-IMAGES/admin-dash.png" style="width:70%;">
+<img src="https://github.com/AlekseyRodimkin/warehouse/blob/main/README-IMAGES/admin-dash.png" style="width:90%;">
 
 #### Логин
 <img src="https://github.com/AlekseyRodimkin/warehouse/blob/main/README-IMAGES/login.png" style="width:90%;">
